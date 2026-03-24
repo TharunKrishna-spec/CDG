@@ -16,16 +16,20 @@ export const getIcon = (iconName: string) => {
 // === Scramble Text Effect ===
 export const ScrambleText = ({ text, className = "" }: { text: string; className?: string }) => {
   const [displayText, setDisplayText] = useState(text);
-  const chars = "!<>-_\\/[]{}—=+*^?#________";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   
   const scramble = () => {
     let iteration = 0;
     const interval = setInterval(() => {
       setDisplayText(
-        text.split("").map((char, index) => {
-          if (index < iteration) return text[index];
-          return chars[Math.floor(Math.random() * chars.length)];
-        }).join("")
+        text
+          .split("")
+          .map((char, index) => {
+            if (char === " " || char === ".") return char;
+            if (index < iteration) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("")
       );
       if (iteration >= text.length) clearInterval(interval);
       iteration += 1 / 3;
@@ -33,7 +37,7 @@ export const ScrambleText = ({ text, className = "" }: { text: string; className
   };
 
   return (
-    <motion.span onMouseEnter={scramble} className={className}>
+    <motion.span onMouseEnter={scramble} className={`${className} inline-block tabular-nums`}>
       {displayText}
     </motion.span>
   );

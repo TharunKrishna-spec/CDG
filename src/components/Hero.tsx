@@ -49,11 +49,11 @@ export const Hero = () => {
             
             <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.85] mb-10 cursor-default">
               <motion.div variants={itemVariants} transition={{ duration: 0.8 }}>
-                <ScrambleText text="Silicon" className="block" />
+                <ScrambleText text="Circuit" className="block" />
               </motion.div>
               <motion.div variants={itemVariants} transition={{ duration: 0.8 }}>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-orange via-orange-300 to-amber-400 block">
-                  <ScrambleText text="Architects." />
+                  <ScrambleText text="Development Guild." />
                 </span>
               </motion.div>
             </h1>
