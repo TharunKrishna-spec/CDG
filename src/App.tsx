@@ -494,10 +494,8 @@ const Hero = () => {
           </motion.div>
 
           <motion.div
-            variants={{
-              hidden: { opacity: 0, scale: 0.8, rotate: 5 },
-              visible: { opacity: 1, scale: 1, rotate: 0 }
-            }}
+            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
             className="relative"
           >

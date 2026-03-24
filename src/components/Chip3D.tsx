@@ -4,17 +4,17 @@ import { Float, MeshDistortMaterial, MeshWobbleMaterial, PerspectiveCamera, Pres
 import * as THREE from 'three';
 
 const DataParticles = () => {
-  const count = 40;
+  const count = 60;
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
       const t = Math.random() * 100;
-      const factor = 20 + Math.random() * 100;
-      const speed = 0.01 + Math.random() / 200;
-      const xFactor = -5 + Math.random() * 10;
-      const yFactor = -5 + Math.random() * 10;
-      const zFactor = -5 + Math.random() * 10;
+      const factor = 10 + Math.random() * 50;
+      const speed = 0.005 + Math.random() / 150;
+      const xFactor = -4 + Math.random() * 8;
+      const yFactor = -4 + Math.random() * 8;
+      const zFactor = -4 + Math.random() * 8;
       temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
     }
     return temp;
@@ -25,17 +25,18 @@ const DataParticles = () => {
   useFrame((state) => {
     particles.forEach((particle, i) => {
       let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
-      t = particle.t += speed / 2;
-      const a = Math.cos(t) + Math.sin(t * 1) / 10;
-      const b = Math.sin(t) + Math.cos(t * 2) / 10;
-      const s = Math.cos(t);
+      t = particle.t += speed;
+      const a = Math.cos(t) + Math.sin(t * 1.2) / 10;
+      const b = Math.sin(t) + Math.cos(t * 1.5) / 10;
+      const s = Math.max(0.2, Math.cos(t) * 0.8 + 0.5);
+      
       dummy.position.set(
-        (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
-        (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
+        xFactor + Math.cos((t / 5) * factor) * 0.5,
+        yFactor + Math.sin((t / 5) * factor) * 0.5,
+        zFactor + Math.sin(t) * 0.2
       );
       dummy.scale.set(s, s, s);
-      dummy.rotation.set(s * 5, s * 5, s * 5);
+      dummy.rotation.set(t, t, t);
       dummy.updateMatrix();
       meshRef.current!.setMatrixAt(i, dummy.matrix);
     });
@@ -44,30 +45,36 @@ const DataParticles = () => {
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <boxGeometry args={[0.05, 0.05, 0.05]} />
-      <meshStandardMaterial color="#FF6321" emissive="#FF6321" emissiveIntensity={5} />
+      <boxGeometry args={[0.04, 0.04, 0.04]} />
+      <meshStandardMaterial color="#FF6321" emissive="#FF6321" emissiveIntensity={4} />
     </instancedMesh>
   );
 };
 
 const ScanningEffect = () => {
   const ref = useRef<THREE.Mesh>(null);
+  
   useFrame((state) => {
     if (ref.current) {
-      ref.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 1.4;
+      const time = state.clock.elapsedTime;
+      ref.current.position.y = Math.sin(time * 1.5) * 1.4;
+      if (ref.current.material) {
+        (ref.current.material as THREE.MeshBasicMaterial).opacity = 0.4 + Math.abs(Math.sin(time * 3)) * 0.4;
+      }
     }
   });
 
   return (
     <mesh ref={ref} position={[0, 0, 0.18]}>
-      <planeGeometry args={[2.8, 0.05]} />
-      <meshBasicMaterial color="#FF6321" transparent opacity={0.8} />
+      <planeGeometry args={[2.8, 0.03]} />
+      <meshBasicMaterial color="#FF6321" transparent opacity={0.6} />
     </mesh>
   );
 };
 
 const ChipModel = () => {
   const meshRef = useRef<THREE.Group>(null);
+  const corePulseRef = useRef<THREE.Mesh>(null);
   const { mouse } = useThree();
   
   const traces = useMemo(() => {
@@ -90,15 +97,29 @@ const ChipModel = () => {
 
   useFrame((state) => {
     if (meshRef.current) {
-      // Smoothly tilt towards mouse
-      const targetRotationY = mouse.x * 0.5;
-      const targetRotationX = -mouse.y * 0.5;
+      const time = state.clock.elapsedTime;
       
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, targetRotationY, 0.1);
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetRotationX, 0.1);
+      // Slow base rotation
+      meshRef.current.rotation.z += 0.001;
+      
+      // Smoothly tilt towards mouse
+      const targetRotationY = mouse.x * 0.4;
+      const targetRotationX = -mouse.y * 0.4;
+      
+      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, targetRotationY, 0.05);
+      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetRotationX, 0.05);
       
       // Add a subtle constant float
-      meshRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.1;
+      meshRef.current.position.y = Math.sin(time * 0.5) * 0.1;
+
+      // Core pulsing
+      if (corePulseRef.current) {
+        const pulse = 0.4 + Math.sin(time * 4) * 0.2;
+        corePulseRef.current.scale.setScalar(0.9 + pulse * 0.2);
+        if (corePulseRef.current.material) {
+          (corePulseRef.current.material as THREE.MeshBasicMaterial).opacity = pulse;
+        }
+      }
     }
   });
 
@@ -129,7 +150,7 @@ const ChipModel = () => {
       </mesh>
 
       {/* Glowing Core Pulse */}
-      <mesh position={[0, 0, 0.165]}>
+      <mesh ref={corePulseRef} position={[0, 0, 0.165]}>
         <planeGeometry args={[0.7, 0.7]} />
         <meshBasicMaterial color="#FF6321" transparent opacity={0.6} />
       </mesh>
