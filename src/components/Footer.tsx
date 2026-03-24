@@ -30,30 +30,30 @@ export const Footer = () => {
   );
 
   return (
-    <footer ref={footerRef} className="bg-black border-t border-white/5 pt-32 pb-16 relative overflow-hidden">
+    <footer ref={footerRef} className="chip-section bg-black border-t border-white/5 pt-20 pb-10 relative overflow-hidden">
       {/* Holographic background */}
       <motion.div className="absolute inset-0 pointer-events-none" style={{ background: holoGradient }} />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-4 gap-20 mb-32">
+      <div className="w-full px-4 md:px-8 xl:px-10 relative z-10">
+        <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-2">
-            <div className="flex items-center gap-4 mb-10">
+            <div className="flex items-center gap-4 mb-6">
               <motion.div
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-[0_0_24px_rgba(255,255,255,0.1)]"
               >
-                <span className="text-black font-black text-2xl tracking-tighter">C</span>
+                <span className="text-black font-black text-xl tracking-tighter">C</span>
               </motion.div>
-              <span className="font-black text-2xl tracking-tight">Chip Design Group</span>
+              <span className="font-black text-xl tracking-tight">Chip Design Group</span>
             </div>
-            <p className="text-gray-500 max-w-sm text-lg leading-relaxed font-medium">
+            <p className="text-gray-500 max-w-sm text-base leading-relaxed font-medium">
               The premier VLSI and hardware design club at VIT Chennai. Building the next generation of silicon engineers.
             </p>
           </div>
           <div>
-            <h5 className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-10 italic">Navigation</h5>
-            <ul className="space-y-6 text-base text-gray-400 font-bold">
+            <h5 className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-6 italic">Navigation</h5>
+            <ul className="space-y-4 text-sm text-gray-400 font-bold">
               <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
               <li><a href="#departments" className="hover:text-white transition-colors">Departments</a></li>
               <li><a href="#board" className="hover:text-white transition-colors">Board Members</a></li>
@@ -63,29 +63,29 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h5 className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-10 italic">Connect</h5>
-            <div className="flex gap-6">
+            <h5 className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-6 italic">Connect</h5>
+            <div className="flex gap-4">
               {[Linkedin, Github, Mail].map((Icon, idx) => (
                 <motion.a 
                   key={idx} href="#" 
                   whileHover={{ y: -8, scale: 1.1, boxShadow: '0 10px 30px rgba(255,87,34,0.2)' }}
-                  className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500 hover:bg-white hover:text-black transition-all border border-white/10"
+                  className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-gray-500 hover:bg-white hover:text-black transition-all border border-white/10"
                 >
-                  <Icon size={24} />
+                  <Icon size={18} />
                 </motion.a>
               ))}
             </div>
           </div>
         </div>
         
-        <div className="border-t border-white/5 pt-16 flex flex-col md:flex-row justify-between items-center gap-10">
+        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-gray-600 font-bold tracking-widest uppercase">
             © 2026 Chip Design Group. All rights reserved.
           </div>
-          <div className="flex items-center gap-10">
+          <div className="flex items-center gap-6">
             <div className="text-sm text-gray-600 font-black tracking-[0.3em] uppercase">VIT Chennai</div>
-            <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
-              <Globe size={16} className="text-gray-600" />
+            <div className="w-8 h-8 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+              <Globe size={14} className="text-gray-600" />
             </div>
           </div>
         </div>

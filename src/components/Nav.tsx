@@ -24,8 +24,8 @@ export const Nav = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-700 ${isScrolled ? 'py-4' : 'py-8'}`}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className={`relative flex justify-between items-center px-8 py-4 rounded-[2rem] transition-all duration-500 border ${isScrolled ? 'bg-black/40 backdrop-blur-2xl border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'bg-transparent border-transparent'}`}>
+      <div className="w-full px-4 md:px-8 xl:px-10">
+        <div className={`relative flex justify-between items-center px-8 py-4 rounded-[1.75rem] transition-all duration-500 border ${isScrolled ? 'chip-surface bg-black/55 backdrop-blur-2xl border-[#e18233]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'bg-transparent border-transparent'}`}>
           <motion.div 
             className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-neon-orange to-transparent opacity-50"
             style={{ scaleX, transformOrigin: 'left' }}
@@ -43,16 +43,11 @@ export const Nav = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-black text-lg tracking-tighter leading-none">CDG</span>
-              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 leading-none mt-1">Silicon Architects</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 leading-none mt-1">Circuit Development Guild</span>
             </div>
           </motion.div>
 
           <div className="hidden md:flex items-center gap-8">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/5 mr-4">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">System Active</span>
-            </div>
-            
             {navLinks.map((link, idx) => (
               <motion.a 
                 key={link.name} 
@@ -73,7 +68,7 @@ export const Nav = () => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => document.getElementById('recruitment')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-white text-black px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-neon-orange hover:text-white transition-all shadow-[0_10px_20px_rgba(255,255,255,0.1)]"
+              className="bg-gradient-to-r from-neon-orange to-[#8f4a1c] text-white px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-[0_10px_20px_rgba(255,87,34,0.16)]"
             >
               Join Club
             </motion.button>
@@ -116,7 +111,7 @@ export const Nav = () => {
                 document.getElementById('recruitment')?.scrollIntoView({ behavior: 'smooth' });
                 setIsMenuOpen(false);
               }}
-              className="bg-white text-black px-5 py-6 rounded-[2rem] text-center font-black text-xl uppercase tracking-widest mt-4"
+              className="bg-gradient-to-r from-neon-orange to-[#8f4a1c] text-white px-5 py-6 rounded-[2rem] text-center font-black text-xl uppercase tracking-widest mt-4"
             >
               Join CDG
             </button>

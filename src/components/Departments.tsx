@@ -6,7 +6,7 @@ import { SectionHeader } from './shared';
 
 const HexColorMap: Record<string, string> = {
   'text-neon-orange': '#FF5722',
-  'text-blue-400': '#60A5FA',
+  'text-copper-soft': '#d89a52',
   'text-white': '#FFFFFF',
 };
 
@@ -68,13 +68,13 @@ export const Departments = () => {
   const orbitRadius = 260;
 
   return (
-    <section ref={sectionRef} id="departments" className="bg-[#050505] min-h-screen flex flex-col justify-center overflow-hidden relative py-20">
+    <section ref={sectionRef} id="departments" className="chip-section bg-[#050505] min-h-screen flex flex-col justify-center overflow-hidden relative py-20">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <motion.div style={{ y: bgY1 }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px]" />
-        <motion.div style={{ y: bgY2 }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px]" />
+        <motion.div style={{ y: bgY1 }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-neon-orange/5 rounded-full blur-[100px]" />
+        <motion.div style={{ y: bgY2 }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#8f4a1c]/8 rounded-full blur-[100px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-20">
+      <div className="w-full px-4 md:px-8 xl:px-10 relative z-10 mb-20">
         <SectionHeader subtitle="Our Ecosystem" title="Specialised Departments." number="02" />
       </div>
 
@@ -82,10 +82,10 @@ export const Departments = () => {
         <div className="flex overflow-x-auto gap-6 p-6 pb-12 snap-x snap-mandatory z-20 mt-4 no-scrollbar scroll-smooth">
           {DEPARTMENTS.map((dept, idx) => (
             <div key={idx} onClick={() => setActiveDept(dept)}
-              className="relative min-w-[280px] w-[280px] snap-center bg-white/5 border border-white/10 p-8 rounded-[2.5rem] flex flex-col items-center text-center backdrop-blur-sm active:scale-95 transition-transform flex-shrink-0 group shadow-lg cursor-pointer"
+              className="chip-surface relative min-w-[280px] w-[280px] snap-center p-8 rounded-[2rem] flex flex-col items-center text-center backdrop-blur-sm active:scale-95 transition-transform flex-shrink-0 group shadow-lg cursor-pointer"
             >
               <div className="mb-6 w-24 h-24 flex items-center justify-center">
-                <DeptIcon3D iconName={dept.icon} colorClass={idx % 2 === 0 ? 'text-blue-400' : 'text-neon-orange'} isHovered={true} className="w-full h-full" />
+                <DeptIcon3D iconName={dept.icon} colorClass={idx % 2 === 0 ? 'text-copper-soft' : 'text-neon-orange'} isHovered={true} className="w-full h-full" />
               </div>
               <h4 className="text-2xl font-black mb-3 text-white">{dept.name}</h4>
               <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 h-[60px] overflow-hidden font-medium">{dept.description}</p>
@@ -135,7 +135,7 @@ export const Departments = () => {
                       onClick={() => setActiveDept(dept)}
                       className="relative z-30 group outline-none"
                     >
-                      <DeptIcon3D iconName={dept.icon} colorClass={index % 2 === 0 ? 'text-blue-400' : 'text-neon-orange'} isHovered={hoveredDeptId === index} />
+                      <DeptIcon3D iconName={dept.icon} colorClass={index % 2 === 0 ? 'text-copper-soft' : 'text-neon-orange'} isHovered={hoveredDeptId === index} />
                       <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 text-[10px] font-black text-white uppercase tracking-[0.3em] transition-opacity duration-300 ${hoveredDeptId === index ? 'opacity-100' : 'opacity-40'}`}>
                         {dept.name}
                       </div>
@@ -166,14 +166,14 @@ export const Departments = () => {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-4xl bg-black border border-white/10 rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+              className="chip-surface relative w-full max-w-4xl bg-black rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
               onClick={e => e.stopPropagation()}
             >
               <button onClick={() => setActiveDept(null)} className="absolute top-6 right-6 z-50 p-3 bg-white/10 rounded-full hover:bg-white hover:text-black transition-all">
                 <X size={24} />
               </button>
               <div className="w-full md:w-2/5 bg-gradient-to-br from-white/5 to-transparent p-12 flex flex-col items-center justify-center relative overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
-                <div className="absolute inset-0 opacity-10 bg-blue-500 blur-[100px]"></div>
+                <div className="absolute inset-0 opacity-10 bg-neon-orange blur-[100px]"></div>
                 <div className="relative z-10 text-center">
                   <DeptIcon3D iconName={activeDept.icon} colorClass="text-white" isHovered={true} className="w-48 h-48 mx-auto" />
                   <h2 className="text-4xl font-black text-white mt-8 tracking-tighter">{activeDept.name}</h2>
@@ -200,7 +200,7 @@ export const Departments = () => {
                   </ul>
                 </div>
                 <button onClick={() => setActiveDept(null)}
-                  className="w-full py-5 bg-white text-black font-black uppercase tracking-widest rounded-2xl hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center gap-3"
+                  className="w-full py-5 bg-gradient-to-r from-neon-orange to-[#8f4a1c] text-white font-black uppercase tracking-widest rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-3"
                 >
                   Join Department <ArrowRight size={20} />
                 </button>

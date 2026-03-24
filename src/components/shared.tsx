@@ -50,15 +50,15 @@ export const SectionHeader = ({ subtitle, title, number }: { subtitle: string; t
       className="relative mb-24"
     >
       {number && (
-        <div className="absolute -top-8 -left-8 text-[8rem] font-black text-white/[0.02] leading-none select-none pointer-events-none">
+        <div className="absolute -top-8 -left-4 text-[7rem] font-black text-[#e18233]/[0.08] leading-none select-none pointer-events-none">
           {number}
         </div>
       )}
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-12 h-px bg-neon-orange" />
-        <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-neon-orange italic">{subtitle}</h2>
+        <div className="w-14 h-px bg-gradient-to-r from-neon-orange to-transparent" />
+        <h2 className="trace-label text-neon-orange">{subtitle}</h2>
       </div>
-      <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] max-w-2xl text-white">
+      <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] max-w-4xl text-white uppercase">
         <ScrambleText text={title} />
       </h3>
     </motion.div>

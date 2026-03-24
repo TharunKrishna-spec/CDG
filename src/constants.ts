@@ -167,16 +167,20 @@ export const EVENTS: Event[] = [
 
 export const OPEN_ROLES: OpenRole[] = [
   {
-    title: 'RTL Design Intern',
+    title: 'RTL Design Member',
     description: 'Passionate about digital logic and Verilog? Join us to build next-gen cores.',
   },
   {
-    title: 'Content Writer',
-    description: 'Help us document our projects and write technical blogs for the community.',
+    title: 'Design Verification Member',
+    description: 'Work on testbenches, assertions, and coverage-driven validation for digital designs.',
   },
   {
-    title: 'Event Coordinator',
-    description: 'Manage our workshops and ensure smooth execution of club events.',
+    title: 'Physical Design Member',
+    description: 'Explore floorplanning, routing, and layout optimization across advanced technology nodes.',
+  },
+  {
+    title: 'System Management Member',
+    description: 'Support club infrastructure, tooling, and coordination across projects and operations.',
   },
 ];
 

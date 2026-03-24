@@ -8,7 +8,7 @@ export const WhoWeAre = () => {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   return (
-    <section id="about" className="py-32 px-6 relative overflow-hidden film-grain" ref={sectionRef}>
+    <section id="about" className="chip-section py-32 px-6 relative overflow-hidden film-grain" ref={sectionRef}>
       {/* Morphing blob background */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
         <motion.div
@@ -22,23 +22,23 @@ export const WhoWeAre = () => {
             scale: [1, 1.1, 0.95, 1],
           }}
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-[600px] h-[600px] bg-gradient-to-br from-neon-orange/[0.04] via-purple-500/[0.03] to-cyan-500/[0.04] blur-[80px]"
+          className="w-[600px] h-[600px] bg-gradient-to-br from-neon-orange/[0.06] via-[#8f4a1c]/[0.04] to-[#c96f28]/[0.05] blur-[80px]"
         />
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="w-full px-4 md:px-8 xl:px-10 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Main Editorial Card */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="md:col-span-7 md:row-span-2 p-12 md:p-16 rounded-[3rem] bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group"
+            className="chip-surface md:col-span-7 md:row-span-2 p-12 md:p-16 rounded-[2rem] flex flex-col justify-between relative overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-neon-orange/10 to-transparent pointer-events-none" />
             <div className="absolute bottom-6 right-6 w-20 h-20 border-b-2 border-r-2 border-neon-orange/10 pointer-events-none" />
             <div>
-              <div className="text-[10px] font-black uppercase tracking-[0.4em] text-neon-orange mb-10 flex items-center gap-3">
+              <div className="trace-label text-neon-orange mb-10 flex items-center gap-3">
                 <div className="w-8 h-px bg-neon-orange" />
                 01 / Who We Are
               </div>
@@ -66,7 +66,7 @@ export const WhoWeAre = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.15, duration: 0.8 }}
-            className="md:col-span-5 p-10 rounded-[3rem] bg-gradient-to-br from-neon-orange via-orange-600 to-neon-red text-white relative overflow-hidden"
+            className="chip-surface md:col-span-5 p-10 rounded-[2rem] bg-gradient-to-br from-[#9f4f1e] via-[#c96f28] to-[#82401a] text-white relative overflow-hidden"
           >
             <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
             <div className="grid grid-cols-2 gap-8 relative z-10">
@@ -84,7 +84,7 @@ export const WhoWeAre = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.25, duration: 0.8 }}
-            className="md:col-span-3 p-8 rounded-[3rem] bg-white/[0.03] border border-white/10 flex flex-col justify-center items-center text-center relative overflow-hidden group hover:border-neon-orange/20 transition-colors"
+            className="chip-surface md:col-span-3 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group hover:border-neon-orange/20 transition-colors"
           >
             <div className="absolute inset-0 bg-gradient-to-t from-neon-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <Globe className="text-neon-orange mb-4 relative z-10 group-hover:scale-110 transition-transform" size={36} />
@@ -97,10 +97,10 @@ export const WhoWeAre = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.35, duration: 0.8 }}
-            className="md:col-span-2 p-8 rounded-[3rem] bg-white/[0.03] border border-white/10 flex flex-col justify-center items-center text-center relative overflow-hidden group hover:border-white/20 transition-colors"
+            className="chip-surface md:col-span-2 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group hover:border-white/20 transition-colors"
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Users className="text-cyan-400 mb-4 relative z-10 group-hover:scale-110 transition-transform" size={36} />
+            <div className="absolute inset-0 bg-gradient-to-t from-neon-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Users className="text-[#d89a52] mb-4 relative z-10 group-hover:scale-110 transition-transform" size={36} />
             <h3 className="text-base font-black uppercase tracking-widest mb-2 relative z-10">50+ Members</h3>
             <p className="text-xs text-white/40 relative z-10 leading-relaxed">A vibrant community of hardware enthusiasts.</p>
           </motion.div>

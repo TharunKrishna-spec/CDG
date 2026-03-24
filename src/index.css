@@ -16,6 +16,9 @@
   --color-holo-4: #76FF03;
   --color-surface-dark: #0a0a0a;
   --color-surface-darker: #050505;
+  --color-copper-1: #e18233;
+  --color-copper-2: #8f4a1c;
+  --color-panel-line: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {
@@ -26,6 +29,10 @@
   body {
     @apply antialiased text-white bg-surface-darker;
     cursor: none;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 
   /* Hide default scrollbar, show custom */
@@ -92,7 +99,7 @@
   .glitch-text::before {
     animation: glitch-1 2s infinite linear alternate-reverse;
     clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-    color: #00E5FF;
+    color: #d89a52;
     left: 2px;
   }
   .glitch-text::after {
@@ -173,9 +180,9 @@
     background: linear-gradient(
       135deg,
       rgba(255,87,34,0.1) 0%,
-      rgba(224,64,251,0.1) 25%,
-      rgba(0,229,255,0.1) 50%,
-      rgba(118,255,3,0.1) 75%,
+      rgba(143,74,28,0.12) 25%,
+      rgba(201,111,40,0.08) 50%,
+      rgba(216,154,82,0.1) 75%,
       rgba(255,87,34,0.1) 100%
     );
     background-size: 400% 400%;
@@ -211,6 +218,71 @@
 
   .animate-spin-reverse-slow {
     animation: spin-reverse 40s linear infinite;
+  }
+
+  .chip-section {
+    position: relative;
+  }
+
+  .chip-section::before {
+    content: '';
+    position: absolute;
+    inset: 24px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 32px;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(225,130,51,0.12), transparent 18%, transparent 82%, rgba(225,130,51,0.12)),
+      linear-gradient(180deg, rgba(255,255,255,0.02), transparent 20%, transparent 80%, rgba(255,255,255,0.02));
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+  }
+
+  .chip-section::after {
+    content: '';
+    position: absolute;
+    inset: 24px 16px;
+    pointer-events: none;
+    border-radius: 32px;
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(225,130,51,0.18) 12%, transparent 24%) top left / 180px 1px no-repeat,
+      linear-gradient(180deg, transparent 0%, rgba(225,130,51,0.18) 12%, transparent 24%) top left / 1px 180px no-repeat,
+      linear-gradient(270deg, transparent 0%, rgba(225,130,51,0.18) 12%, transparent 24%) bottom right / 180px 1px no-repeat,
+      linear-gradient(0deg, transparent 0%, rgba(225,130,51,0.18) 12%, transparent 24%) bottom right / 1px 180px no-repeat;
+  }
+
+  .chip-surface {
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+      linear-gradient(135deg, rgba(225,130,51,0.08), transparent 35%, transparent 65%, rgba(225,130,51,0.04));
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 20px 60px rgba(0,0,0,0.24);
+  }
+
+  .chip-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(90deg, rgba(225,130,51,0.14), transparent 14%) top left / 120px 1px no-repeat,
+      linear-gradient(180deg, rgba(225,130,51,0.14), transparent 14%) top left / 1px 120px no-repeat,
+      linear-gradient(270deg, rgba(225,130,51,0.12), transparent 14%) bottom right / 120px 1px no-repeat,
+      linear-gradient(0deg, rgba(225,130,51,0.12), transparent 14%) bottom right / 1px 120px no-repeat;
+    border-radius: inherit;
+  }
+
+  .trace-label {
+    color: rgba(255,255,255,0.34);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
   }
 
   /* ============================

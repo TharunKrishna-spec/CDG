@@ -1,76 +1,80 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'motion/react';
+import React, { useMemo, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ExternalLink, Calendar, X, ArrowRight, Github } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { SectionHeader } from './shared';
 
 const ProjectCard = ({ project, index, onOpen }: { project: any; index: number; onOpen: () => void }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 300, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 300, damping: 30 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
-
-  const glowBackground = useTransform(
-    [springX, springY],
-    ([x, y]) => `radial-gradient(600px circle at ${x}px ${y}px, rgba(255,87,34,0.25), transparent 40%)`
-  );
-  const rotateX = useTransform(springY, [0, 450], [5, -5]);
-  const rotateY = useTransform(springX, [0, 400], [-5, 5]);
+  const [isHovered, setIsHovered] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div 
-      className="relative h-[450px] [perspective:1500px] group"
-      onMouseEnter={() => setIsFlipped(true)}
-      onMouseLeave={() => setIsFlipped(false)}
-      onMouseMove={handleMouseMove}
+      className="relative h-[400px] md:h-[430px] [perspective:1500px] group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={onOpen}
       whileTap={{ scale: 0.98 }}
     >
-      <motion.div className="absolute -inset-8 rounded-[4rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-3xl pointer-events-none z-0"
-        style={{ background: glowBackground }} />
+      <div className="absolute -inset-6 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-3xl pointer-events-none z-0 bg-[radial-gradient(circle_at_center,rgba(255,87,34,0.22),transparent_65%)]" />
       <motion.div
-        style={{ rotateX: isFlipped ? 0 : rotateX, rotateY: isFlipped ? 180 : rotateY }}
-        animate={{ scale: isFlipped ? 1.02 : 1, z: isFlipped ? 50 : 0 }}
+        animate={{ scale: isHovered ? 1.02 : 1 }}
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 1 }}
-        className="w-full h-full relative [transform-style:preserve-3d] cursor-pointer z-10"
+        className="w-full h-full relative cursor-pointer z-10"
       >
-        {/* Front */}
-        <div className="absolute inset-0 [backface-visibility:hidden] rounded-[3rem] overflow-hidden border border-white/10 bg-white/[0.02] backdrop-blur-sm group-hover:border-white/20 transition-colors">
+        <motion.div
+          animate={{ rotateY: prefersReducedMotion ? 0 : isHovered ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 160, damping: 16, mass: 1 }}
+          className="chip-surface absolute inset-0 [backface-visibility:hidden] rounded-[2rem] overflow-hidden backdrop-blur-sm group-hover:border-white/20 transition-colors z-10"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
           <div className="absolute inset-0">
-            <img src={project.image} alt={project.name} className="w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-1000" referrerPolicy="no-referrer" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-            <motion.div initial={{ x: '-100%' }} animate={isFlipped ? { x: '100%' } : { x: '-100%' }}
+            <img src={project.image} alt={project.name} className="w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#090909] via-[#090909]/88 to-[#090909]/65" />
+            <motion.div initial={{ x: '-100%' }} animate={isHovered ? { x: '100%' } : { x: '-100%' }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 pointer-events-none" />
           </div>
-          <div className="absolute bottom-0 left-0 right-0 p-10">
-            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-neon-orange mb-4">{project.department}</div>
-            <h4 className="text-3xl font-black mb-4 tracking-tighter leading-none group-hover:text-neon-orange transition-colors">{project.name}</h4>
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-white/40">{project.date}</span>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-neon-orange animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{project.status}</span>
+          <div className="absolute inset-0 z-20 p-6 md:p-8 flex flex-col justify-between">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-[0.35em] text-neon-orange/80 mb-3">{project.department}</div>
+                <h4 className="max-w-[15ch] text-2xl md:text-3xl font-black tracking-tighter leading-[0.95] text-white group-hover:text-neon-orange transition-colors">
+                  {project.name}
+                </h4>
+              </div>
+              <div className="chip-surface rounded-full px-3 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-white/65">
+                {project.status}
+              </div>
+            </div>
+
+            <div>
+              <p className="max-w-md text-sm md:text-base leading-relaxed text-white/62 font-medium mb-6">
+                {project.description}
+              </p>
+              <div className="flex items-center justify-between border-t border-white/8 pt-5">
+                <span className="text-xs font-mono uppercase tracking-[0.18em] text-white/40">{project.date}</span>
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-white/44">
+                  <span className="h-2 w-2 rounded-full bg-neon-orange" />
+                  Open Project
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Back */}
-        <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-[3rem] overflow-hidden border border-neon-orange/30 bg-black p-10 flex flex-col justify-between">
+        <motion.div
+          animate={{ rotateY: prefersReducedMotion ? 0 : isHovered ? 360 : 180 }}
+          transition={{ type: "spring", stiffness: 160, damping: 16, mass: 1 }}
+          className="chip-surface absolute inset-0 [backface-visibility:hidden] rounded-[2rem] overflow-hidden bg-black p-10 flex flex-col justify-between z-10"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neon-orange/20 via-transparent to-transparent" />
           </div>
           <div className="relative z-10">
-            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-8 italic">Project Brief</div>
-            <h4 className="text-2xl font-black mb-6 tracking-tight text-neon-orange">{project.name}</h4>
+            <div className="text-[10px] font-black uppercase tracking-[0.35em] text-white/30 mb-6 italic">Project Brief</div>
+            <h4 className="text-2xl font-black mb-5 tracking-tight text-neon-orange">{project.name}</h4>
             <p className="text-gray-400 leading-relaxed font-medium">{project.description}</p>
           </div>
           <div className="relative z-10 flex items-center justify-between pt-8 border-t border-white/5">
@@ -81,13 +85,13 @@ const ProjectCard = ({ project, index, onOpen }: { project: any; index: number; 
                 </div>
               ))}
             </div>
-            <motion.button whileHover={{ scale: 1.1 }}
+            <motion.div whileHover={{ scale: 1.08 }}
               className="w-14 h-14 rounded-2xl bg-neon-orange flex items-center justify-center text-white shadow-[0_0_30px_rgba(255,87,34,0.3)]"
             >
               <ExternalLink size={24} />
-            </motion.button>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
@@ -125,7 +129,7 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: any | null; isOpe
                 <div className="flex flex-wrap gap-4 mb-12">
                   {project.githubUrl && project.githubUrl !== '#' && (
                     <motion.a href={project.githubUrl} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-3 bg-white text-black px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest"
+                      className="flex items-center gap-3 bg-gradient-to-r from-neon-orange to-[#8f4a1c] text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest"
                     >
                       <Github size={20} /> Repository
                     </motion.a>
@@ -172,31 +176,57 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: any | null; isOpe
 
 export const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
-  const targetRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-  const x = useTransform(scrollYProgress, [0, 1], ["1%", "-60%"]);
+  const prefersReducedMotion = useReducedMotion();
+  const carouselProjects = useMemo(() => [...PROJECTS, ...PROJECTS], []);
 
   return (
-    <section id="projects" ref={targetRef} className="relative h-[300vh] bg-[#050505]">
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 w-full relative z-10 mb-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-            <SectionHeader subtitle="Portfolio" title="Silicon Masterpieces." number="04" />
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} className="flex items-center gap-8">
-              <div className="text-right hidden sm:block">
-                <div className="text-2xl font-black text-white">10+</div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Active Projects</div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-        <motion.div style={{ x }} className="flex gap-10 px-6">
-          {PROJECTS.map((project, idx) => (
-            <div key={idx} className="min-w-[400px] md:min-w-[500px]">
-              <ProjectCard project={project} index={idx} onOpen={() => setSelectedProject(project)} />
+    <section id="projects" className="chip-section relative py-32 bg-[#050505]">
+      <div className="w-full px-4 md:px-8 xl:px-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 mb-12">
+          <SectionHeader subtitle="Portfolio" title="Silicon Masterpieces." number="04" />
+          <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} className="flex items-center gap-8">
+            <div className="text-right hidden sm:block">
+              <div className="text-2xl font-black text-white">10+</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Active Projects</div>
             </div>
-          ))}
-        </motion.div>
+          </motion.div>
+        </div>
+
+        <div className="chip-surface overflow-hidden rounded-[2rem] p-3 md:p-4">
+          <motion.div
+            className="flex w-max gap-5 md:gap-6"
+            animate={
+              prefersReducedMotion || selectedProject
+                ? { x: 0 }
+                : { x: ['0%', '-50%'] }
+            }
+            transition={
+              prefersReducedMotion || selectedProject
+                ? { duration: 0 }
+                : {
+                    duration: 28,
+                    ease: 'linear',
+                    repeat: Infinity,
+                  }
+            }
+          >
+            {carouselProjects.map((project, idx) => (
+              <div
+                key={`${project.name}-${idx}`}
+                className="w-[280px] sm:w-[310px] md:w-[340px] lg:w-[360px] shrink-0"
+              >
+                <ProjectCard project={project} index={idx} onOpen={() => setSelectedProject(project)} />
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="w-full px-4 md:px-8 xl:px-10 mt-6">
+        <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+          <span>Auto Carousel</span>
+          <span>Open Any Card For Details</span>
+        </div>
       </div>
       <ProjectModal project={selectedProject} isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} />
     </section>

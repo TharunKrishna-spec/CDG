@@ -34,7 +34,7 @@ const App = () => {
             <WhoWeAre />
             <SectionDivider variant="wave" />
             <Departments />
-            <SectionDivider variant="diagonal" />
+            <SectionDivider variant="circuit" />
             <Board />
             <SectionDivider variant="circuit" />
             <Projects />

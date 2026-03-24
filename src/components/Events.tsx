@@ -20,7 +20,7 @@ const TimelineCard: React.FC<{
         initial={{ opacity: 0, x: isEven ? 50 : -50 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="w-[calc(100%-4rem)] md:w-[45%] p-6 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-neon-orange/50 transition-all duration-500 group-hover:bg-white/[0.05]"
+        className="chip-surface w-[calc(100%-4rem)] md:w-[45%] p-6 rounded-[2rem] hover:border-neon-orange/50 transition-all duration-500 group-hover:bg-white/[0.05]"
       >
         <div className="flex justify-between items-start mb-4">
           <span className="text-neon-orange font-black text-sm tracking-widest">{event.year}</span>
@@ -61,7 +61,7 @@ const ArchiveView: React.FC<{ events: Event[]; onBack: () => void; onRecap: (e: 
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEvents.map((event) => (
-          <motion.div key={event.id} layout className="p-6 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-neon-orange/30 transition-all group">
+          <motion.div key={event.id} layout className="chip-surface p-6 rounded-[2rem] hover:border-neon-orange/30 transition-all group">
             <div className="flex justify-between items-start mb-4">
               <div className="p-3 bg-white/5 rounded-xl text-neon-orange">{React.createElement(getIcon(event.icon), { size: 20 })}</div>
               <span className="text-xs font-black text-white/30">{event.year}</span>
@@ -157,8 +157,8 @@ export const EventsTimeline = () => {
   };
 
   return (
-    <section id="events" className="py-32 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="events" className="chip-section py-32 relative overflow-hidden">
+      <div className="w-full px-4 md:px-8 xl:px-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
           <SectionHeader subtitle="Events & Workshops" title="Our Journey." number="05" />
           <div className="flex items-center gap-4">
