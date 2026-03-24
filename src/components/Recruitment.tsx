@@ -1,38 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'motion/react';
-import { ExternalLink, Clock, ArrowRight, Terminal } from 'lucide-react';
-import { OPEN_ROLES } from '../constants';
+import React from 'react';
+import { motion } from 'motion/react';
+import { Clock, ExternalLink, Terminal } from 'lucide-react';
+import { OPEN_ROLES, RECRUITMENT_CONFIG } from '../constants';
 import { ScrambleText } from './shared';
-
-const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
-  const [displayed, setDisplayed] = useState('');
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (!isInView) return;
-    const timeout = setTimeout(() => {
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i <= text.length) {
-          setDisplayed(text.slice(0, i));
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 40);
-      return () => clearInterval(interval);
-    }, delay);
-    return () => clearTimeout(timeout);
-  }, [isInView, text, delay]);
-
-  return (
-    <span ref={ref} className="font-mono">
-      {displayed}
-      {displayed.length < text.length && <span className="typewriter-cursor">_</span>}
-    </span>
-  );
-};
 
 export const Recruitment = () => {
   return (
@@ -60,16 +30,25 @@ export const Recruitment = () => {
                 We're looking for passionate individuals who want to push the boundaries of hardware design. Whether you're a Verilog wizard or a creative coordinator, there's a place for you.
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-6">
-                <motion.a 
-                  href="https://forms.gle/placeholder" target="_blank" rel="noopener noreferrer"
-                  whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto bg-gradient-to-r from-neon-orange to-[#8f4a1c] text-white px-8 py-3.5 rounded-[1.25rem] font-black text-sm flex items-center justify-center gap-3 shadow-[0_16px_35px_rgba(255,87,34,0.18)]"
-                >
-                  Apply Now <ExternalLink size={20} />
-                </motion.a>
+                {RECRUITMENT_CONFIG.isOpen ? (
+                  <motion.a
+                    href={RECRUITMENT_CONFIG.formUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full sm:w-auto bg-gradient-to-r from-neon-orange to-[#8f4a1c] text-white px-8 py-3.5 rounded-[1.25rem] font-black text-sm flex items-center justify-center gap-3 shadow-[0_16px_35px_rgba(255,87,34,0.18)]"
+                  >
+                    Apply Now <ExternalLink size={18} />
+                  </motion.a>
+                ) : (
+                  <div className="w-full sm:w-auto rounded-[1.25rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 text-center text-sm font-black uppercase tracking-[0.22em] text-white/45">
+                    {RECRUITMENT_CONFIG.closedLabel}
+                  </div>
+                )}
                 <div className="flex items-center gap-3 text-white/45 font-bold uppercase tracking-widest text-xs">
                   <Clock size={16} />
-                  Applications close April 5th
+                  {RECRUITMENT_CONFIG.isOpen ? 'Applications Open Now' : RECRUITMENT_CONFIG.closedNote}
                 </div>
               </div>
             </div>

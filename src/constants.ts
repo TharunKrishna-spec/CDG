@@ -184,6 +184,13 @@ export const OPEN_ROLES: OpenRole[] = [
   },
 ];
 
+export const RECRUITMENT_CONFIG = {
+  isOpen: false,
+  formUrl: 'https://forms.gle/placeholder',
+  closedLabel: 'Recruitment Currently Closed',
+  closedNote: 'Applications will be announced soon',
+};
+
 export const TECH_STACK = [
   'Verilog',
   'VHDL',

@@ -31,7 +31,7 @@ export const Footer = () => {
   );
 
   return (
-    <footer ref={footerRef} className="chip-section bg-black border-t border-white/5 pt-20 pb-10 relative overflow-hidden">
+    <footer id="footer" ref={footerRef} className="chip-section bg-black border-t border-white/5 pt-20 pb-10 relative overflow-hidden">
       <motion.div className="absolute inset-0 pointer-events-none" style={{ background: holoGradient }} />
 
       <div className="w-full px-4 md:px-8 xl:px-10 relative z-10">
