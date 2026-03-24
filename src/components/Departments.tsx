@@ -104,8 +104,8 @@ export const Departments = () => {
             <div className="absolute inset-2 rounded-full border border-white/10 bg-gradient-to-br from-white/5 to-transparent"></div>
             <div className="z-10 relative w-full h-full flex items-center justify-center rounded-full overflow-hidden bg-black">
               <div className="flex flex-col items-center justify-center text-white w-full h-full relative">
-                <div className="w-20 h-20 bg-white rounded-2xl rotate-45 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                  <div className="-rotate-45 text-black font-black text-3xl tracking-tighter">C</div>
+                <div className="w-20 h-20 rounded-2xl overflow-hidden rotate-45 flex items-center justify-center mb-4 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.12)] bg-black">
+                  <img src="/cdg-logo.jpeg" alt="CDG logo" className="w-full h-full object-cover -rotate-45 scale-[1.45]" />
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">CDG Group</span>
               </div>

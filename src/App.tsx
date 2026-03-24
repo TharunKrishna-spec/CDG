@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { AdminProvider } from './context/AdminContext';
-import { CustomCursor, InteractiveBackground, ContentReveal, SectionDivider } from './components/shared';
+import { ContentReveal, SectionDivider } from './components/shared';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
@@ -18,8 +18,6 @@ const App = () => {
 
   return (
     <AdminProvider>
-      <CustomCursor />
-      <InteractiveBackground />
       <AnimatePresence mode="wait">
         {isLoading && (
           <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />

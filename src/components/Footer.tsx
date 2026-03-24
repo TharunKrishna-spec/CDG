@@ -26,12 +26,12 @@ export const Footer = () => {
 
   const holoGradient = useTransform(
     [springX, springY],
-    ([x, y]) => `radial-gradient(600px circle at ${(x as number) * 100}% ${(y as number) * 100}%, rgba(255,87,34,0.06), rgba(224,64,251,0.04), rgba(0,229,255,0.04), transparent 70%)`
+    ([x, y]) =>
+      `radial-gradient(600px circle at ${(x as number) * 100}% ${(y as number) * 100}%, rgba(255,87,34,0.06), rgba(224,64,251,0.04), rgba(0,229,255,0.04), transparent 70%)`
   );
 
   return (
     <footer ref={footerRef} className="chip-section bg-black border-t border-white/5 pt-20 pb-10 relative overflow-hidden">
-      {/* Holographic background */}
       <motion.div className="absolute inset-0 pointer-events-none" style={{ background: holoGradient }} />
 
       <div className="w-full px-4 md:px-8 xl:px-10 relative z-10">
@@ -41,11 +41,11 @@ export const Footer = () => {
               <motion.div
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-[0_0_24px_rgba(255,255,255,0.1)]"
+                className="w-10 h-10 overflow-hidden rounded-xl border border-white/10 bg-black/40 flex items-center justify-center shadow-[0_0_24px_rgba(255,255,255,0.1)]"
               >
-                <span className="text-black font-black text-xl tracking-tighter">C</span>
+                <img src="/cdg-logo.jpeg" alt="CDG logo" className="h-full w-full object-cover" />
               </motion.div>
-              <span className="font-black text-xl tracking-tight">Chip Design Group</span>
+              <span className="font-black text-xl tracking-tight">Circuit Development Guild</span>
             </div>
             <p className="text-gray-500 max-w-sm text-base leading-relaxed font-medium">
               The premier VLSI and hardware design club at VIT Chennai. Building the next generation of silicon engineers.
@@ -66,8 +66,9 @@ export const Footer = () => {
             <h5 className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-6 italic">Connect</h5>
             <div className="flex gap-4">
               {[Linkedin, Github, Mail].map((Icon, idx) => (
-                <motion.a 
-                  key={idx} href="#" 
+                <motion.a
+                  key={idx}
+                  href="#"
                   whileHover={{ y: -8, scale: 1.1, boxShadow: '0 10px 30px rgba(255,87,34,0.2)' }}
                   className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-gray-500 hover:bg-white hover:text-black transition-all border border-white/10"
                 >
@@ -77,10 +78,10 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-gray-600 font-bold tracking-widest uppercase">
-            © 2026 Chip Design Group. All rights reserved.
+            Copyright 2026 Circuit Development Guild. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
             <div className="text-sm text-gray-600 font-black tracking-[0.3em] uppercase">VIT Chennai</div>

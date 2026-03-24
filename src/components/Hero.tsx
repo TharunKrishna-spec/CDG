@@ -1,33 +1,19 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'motion/react';
+import { motion } from 'motion/react';
 import { Zap, ArrowRight } from 'lucide-react';
 import { Chip3D } from './Chip3D';
 import { ScrambleText } from './shared';
 
-const HUDElement = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay, duration: 0.6, ease: 'easeOut' }}
-    className={`bg-black/60 backdrop-blur-xl border border-white/10 shadow-2xl ${className}`}
-  >
-    {children}
-  </motion.div>
-);
-
 export const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const chipY = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
+    visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.3 } },
   };
   const itemVariants = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 18 },
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
@@ -36,14 +22,11 @@ export const Hero = () => {
       
       <div className="w-full px-4 md:px-8 xl:px-10 relative z-10">
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div style={{ y: textY }}>
+          <motion.div>
             <motion.div variants={itemVariants} transition={{ duration: 0.8 }}
               className="inline-flex items-center gap-3 px-5 py-2 rounded-full chip-surface text-gray-400 text-xs font-bold uppercase tracking-widest mb-10 backdrop-blur-sm"
             >
-              <div className="relative">
-                <Zap size={14} className="text-neon-orange" />
-                <div className="absolute inset-0 animate-ping"><Zap size={14} className="text-neon-orange/30" /></div>
-              </div>
+              <Zap size={14} className="text-neon-orange" />
               VIT Chennai's Premier VLSI Club
             </motion.div>
             
@@ -84,23 +67,14 @@ export const Hero = () => {
             </motion.div>
           </motion.div>
 
-          <motion.div style={{ y: chipY }}
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
+            transition={{ duration: 0.9, ease: "easeOut", delay: 0.45 }}
             className="relative"
           >
             <div className="absolute inset-0 bg-neon-orange/8 blur-[72px] rounded-full scale-125" />
             <Chip3D />
-            
-            <HUDElement className="absolute top-5 right-5 px-4 py-3 rounded-2xl border-[#e18233]/20" delay={1.2}>
-              <div className="text-[9px] text-white/25 uppercase font-black tracking-[0.25em] mb-1">Architecture</div>
-              <div className="text-sm md:text-base font-black text-white tracking-tight">7nm FinFET</div>
-            </HUDElement>
-            <HUDElement className="absolute bottom-5 left-5 px-4 py-3 rounded-2xl border-[#e18233]/20" delay={1.35}>
-              <div className="text-[9px] text-white/25 uppercase font-black tracking-[0.25em] mb-1">Coverage</div>
-              <div className="text-base md:text-lg font-black text-neon-orange tracking-tight">99.8%</div>
-            </HUDElement>
           </motion.div>
         </motion.div>
 

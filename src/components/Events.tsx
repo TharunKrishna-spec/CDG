@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, ArrowLeft, Search, Edit, Trash2, X, Calendar, MapPin, Plus } from 'lucide-react';
 import { Event } from '../types';
@@ -136,6 +136,7 @@ export const EventsTimeline = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const sortedEvents = [...events].sort((a, b) => parseInt(b.year) - parseInt(a.year));
   const timelineEvents = sortedEvents.slice(0, 5);
@@ -156,8 +157,15 @@ export const EventsTimeline = () => {
     setEditingEvent(null);
   };
 
+  const switchView = (nextView: 'timeline' | 'archive') => {
+    setView(nextView);
+    requestAnimationFrame(() => {
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
   return (
-    <section id="events" className="chip-section py-32 relative overflow-hidden">
+    <section ref={sectionRef} id="events" className="chip-section py-32 relative overflow-hidden">
       <div className="w-full px-4 md:px-8 xl:px-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
           <SectionHeader subtitle="Events & Workshops" title="Our Journey." number="05" />
@@ -169,7 +177,7 @@ export const EventsTimeline = () => {
                 <Plus size={18} /> Add Event
               </button>
             )}
-            <button onClick={() => setView(view === 'timeline' ? 'archive' : 'timeline')}
+            <button onClick={() => switchView(view === 'timeline' ? 'archive' : 'timeline')}
               className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl font-black text-sm hover:bg-white/10 transition-all"
             >
               {view === 'timeline' ? 'View Archive' : 'View Timeline'}
@@ -189,7 +197,7 @@ export const EventsTimeline = () => {
                 ))}
               </div>
               <div className="mt-20 text-center">
-                <button onClick={() => setView('archive')}
+                <button onClick={() => switchView('archive')}
                   className="group inline-flex items-center gap-3 text-white/50 hover:text-white transition-colors font-black uppercase tracking-widest text-sm"
                 >
                   Explore Full Archive <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
@@ -197,7 +205,7 @@ export const EventsTimeline = () => {
               </div>
             </motion.div>
           ) : (
-            <ArchiveView key="archive" events={events} onBack={() => setView('timeline')} onRecap={setSelectedEvent} />
+            <ArchiveView key="archive" events={events} onBack={() => switchView('timeline')} onRecap={setSelectedEvent} />
           )}
         </AnimatePresence>
       </div>

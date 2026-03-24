@@ -37,9 +37,8 @@ export const Nav = () => {
             className="flex items-center gap-4 group cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative w-10 h-10 bg-white rounded-xl flex items-center justify-center group-hover:rotate-[360deg] transition-transform duration-1000 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-              <span className="text-black font-black text-xl tracking-tighter relative z-10">C</span>
-              <div className="absolute inset-0 bg-neon-orange rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
+            <div className="relative h-11 w-11 overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-[0_0_20px_rgba(255,255,255,0.08)]">
+              <img src="/cdg-logo.jpeg" alt="CDG logo" className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-black text-lg tracking-tighter leading-none">CDG</span>

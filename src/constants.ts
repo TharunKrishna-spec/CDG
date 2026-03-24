@@ -38,8 +38,8 @@ export const BOARD: { category: string; members: BoardMember[] }[] = [
   {
     category: 'Executive Board',
     members: [
-      { name: 'Tharun Krishna', role: 'President' },
-      { name: 'Ananya Sharma', role: 'VP Technical' },
+      { name: 'Jagadhish', role: 'President' },
+      { name: 'JP Anirudh', role: 'Vice President' },
       { name: 'Rahul Verma', role: 'VP Operations' },
       { name: 'Sneha Reddy', role: 'VP Outreach' },
     ],
@@ -48,7 +48,7 @@ export const BOARD: { category: string; members: BoardMember[] }[] = [
     category: 'Department Leads',
     members: [
       { name: 'Aditya Raj', role: 'Lead', department: 'RTL Design' },
-      { name: 'Ishita Gupta', role: 'Lead', department: 'Design Verification' },
+      { name: 'Eashwar', role: 'Lead', department: 'Design Verification' },
       { name: 'Karthik S', role: 'Lead', department: 'Physical Design' },
       { name: 'Megha Nair', role: 'Lead', department: 'System Management' },
     ],
