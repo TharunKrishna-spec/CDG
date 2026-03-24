@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, createContext, useContext } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
+import React, { useState, useEffect, useRef, createContext, useContext, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionValue, useSpring } from 'motion/react';
 import { 
   Cpu, 
   ShieldCheck, 
@@ -28,7 +28,7 @@ import {
   Mic,
   Image as ImageIcon
 } from 'lucide-react';
-import { STATS, DEPARTMENTS, BOARD, EVENTS, OPEN_ROLES, TECH_STACK } from './constants';
+import { STATS, DEPARTMENTS, BOARD, PROJECTS, EVENTS, OPEN_ROLES, TECH_STACK } from './constants';
 import { Event } from './types';
 import { Chip3D } from './components/Chip3D';
 
@@ -104,6 +104,8 @@ const getIcon = (iconName: string) => {
 const Nav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -115,75 +117,110 @@ const Nav = () => {
     { name: 'About', href: '#about' },
     { name: 'Departments', href: '#departments' },
     { name: 'Board', href: '#board' },
+    { name: 'Projects', href: '#projects' },
     { name: 'Events', href: '#events' },
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-black/60 backdrop-blur-xl border-b border-white/5 py-3' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-3 group cursor-pointer"
-        >
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-500">
-            <span className="text-black font-black text-xl tracking-tighter">C</span>
-          </div>
-          <span className="font-bold text-xl tracking-tight hidden sm:block">Chip Design Group</span>
-        </motion.div>
+    <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-700 ${isScrolled ? 'py-4' : 'py-8'}`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className={`relative flex justify-between items-center px-8 py-4 rounded-[2rem] transition-all duration-500 border ${isScrolled ? 'bg-black/40 backdrop-blur-2xl border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'bg-transparent border-transparent'}`}>
+          {/* Progress Line inside Nav */}
+          <motion.div 
+            className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-neon-orange to-transparent opacity-50"
+            style={{ scaleX, transformOrigin: 'left' }}
+          />
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10">
-          {navLinks.map((link, idx) => (
-            <motion.a 
-              key={link.name} 
-              href={link.href} 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              className="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group"
-            >
-              {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-white transition-all group-hover:w-full"></span>
-            </motion.a>
-          ))}
-          <motion.button 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-white text-black px-6 py-2.5 rounded-full text-sm font-bold hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-4 group cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            Join CDG
-          </motion.button>
-        </div>
+            <div className="relative w-10 h-10 bg-white rounded-xl flex items-center justify-center group-hover:rotate-[360deg] transition-transform duration-1000 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+              <span className="text-black font-black text-xl tracking-tighter relative z-10">C</span>
+              <div className="absolute inset-0 bg-neon-orange rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-black text-lg tracking-tighter leading-none">CDG</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 leading-none mt-1">Silicon Architects</span>
+            </div>
+          </motion.div>
 
-        {/* Mobile Menu Toggle */}
-        <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? <X /> : <Menu />}
-        </button>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/5 mr-4">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">System Active</span>
+            </div>
+            
+            {navLinks.map((link, idx) => (
+              <motion.a 
+                key={link.name} 
+                href={link.href} 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all relative group"
+              >
+                {link.name}
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-1 rounded-full bg-neon-orange transition-all group-hover:w-1 group-hover:h-1"></span>
+              </motion.a>
+            ))}
+            
+            <motion.button 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => document.getElementById('recruitment')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-white text-black px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-neon-orange hover:text-white transition-all shadow-[0_10px_20px_rgba(255,255,255,0.1)]"
+            >
+              Join Club
+            </motion.button>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-2xl border-b border-white/10 p-8 md:hidden flex flex-col gap-6 shadow-2xl overflow-hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-full left-6 right-6 mt-4 bg-black/95 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-10 md:hidden flex flex-col gap-8 shadow-2xl overflow-hidden z-50"
           >
-            {navLinks.map((link) => (
-              <a 
+            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 mb-2 italic">Navigation Menu</div>
+            {navLinks.map((link, idx) => (
+              <motion.a 
                 key={link.name} 
                 href={link.href} 
-                className="text-2xl font-bold text-gray-300 hover:text-white"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="text-4xl font-black tracking-tighter text-gray-400 hover:text-neon-orange transition-colors flex items-center justify-between group"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.name}
-              </a>
+                <ArrowRight className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />
+              </motion.a>
             ))}
-            <button className="bg-white text-black px-5 py-4 rounded-2xl text-center font-black text-lg">
+            <button 
+              onClick={() => {
+                document.getElementById('recruitment')?.scrollIntoView({ behavior: 'smooth' });
+                setIsMenuOpen(false);
+              }}
+              className="bg-white text-black px-5 py-6 rounded-[2rem] text-center font-black text-xl uppercase tracking-widest mt-4"
+            >
               Join CDG
             </button>
           </motion.div>
@@ -193,77 +230,306 @@ const Nav = () => {
   );
 };
 
+const ScrambleText = ({ text, className = "" }: { text: string; className?: string }) => {
+  const [displayText, setDisplayText] = useState(text);
+  const chars = "!<>-_\\/[]{}—=+*^?#________";
+  
+  const scramble = () => {
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setDisplayText(prev => 
+        text.split("").map((char, index) => {
+          if (index < iteration) return text[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join("")
+      );
+      
+      if (iteration >= text.length) clearInterval(interval);
+      iteration += 1 / 3;
+    }, 30);
+  };
+
+  return (
+    <motion.span 
+      onMouseEnter={scramble}
+      className={className}
+    >
+      {displayText}
+    </motion.span>
+  );
+};
+
+const CustomCursor = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const cursorX = useSpring(mouseX, { stiffness: 500, damping: 28 });
+  const cursorY = useSpring(mouseY, { stiffness: 500, damping: 28 });
+  const ringX = useSpring(mouseX, { stiffness: 150, damping: 20 });
+  const ringY = useSpring(mouseY, { stiffness: 150, damping: 20 });
+
+  useEffect(() => {
+    const moveCursor = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", moveCursor);
+    return () => window.removeEventListener("mousemove", moveCursor);
+  }, []);
+
+  return (
+    <>
+      <motion.div
+        className="fixed top-0 left-0 w-2 h-2 bg-neon-orange rounded-full pointer-events-none z-[9999] mix-blend-difference"
+        style={{ x: cursorX, y: cursorY, translateX: "-50%", translateY: "-50%" }}
+      />
+      <motion.div
+        className="fixed top-0 left-0 w-10 h-10 border border-neon-orange/50 rounded-full pointer-events-none z-[9998]"
+        style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
+      />
+    </>
+  );
+};
+
+const InteractiveBackground = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 100, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 100, damping: 30 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const background = useTransform(
+    [springX, springY],
+    ([x, y]) => `radial-gradient(800px circle at ${x}px ${y}px, rgba(255,87,34,0.08), transparent 80%)`
+  );
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
+      <motion.div 
+        className="absolute inset-0"
+        style={{ background }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-60" />
+    </div>
+  );
+};
+
+const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
+  const [progress, setProgress] = useState(0);
+  const [logs, setLogs] = useState<string[]>([]);
+
+  const bootLogs = useMemo(() => [
+    "INITIALIZING CORE SYSTEMS...",
+    "LOADING RTL MODULES...",
+    "VERIFYING DESIGN CONSTRAINTS...",
+    "MAPPING PHYSICAL LAYOUT...",
+    "SYNCHRONIZING CLOCK DOMAINS...",
+    "BOOTING SILICON MASTERPIECE...",
+  ], []);
+
+  useEffect(() => {
+    let progressInterval: NodeJS.Timeout;
+    let logInterval: NodeJS.Timeout;
+
+    progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          setTimeout(onComplete, 800);
+          return 100;
+        }
+        // Randomize increment slightly for a more "realistic" feel
+        const inc = Math.random() > 0.8 ? 2 : 1;
+        return Math.min(prev + inc, 100);
+      });
+    }, 40);
+
+    logInterval = setInterval(() => {
+      setLogs(prev => {
+        if (prev.length >= bootLogs.length) {
+          clearInterval(logInterval);
+          return prev;
+        }
+        return [...prev, bootLogs[prev.length]];
+      });
+    }, 600);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(logInterval);
+    };
+  }, [onComplete, bootLogs]);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+      className="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center p-10 font-mono"
+    >
+      <div className="w-full max-w-md relative">
+        {/* Decorative background elements */}
+        <div className="absolute -inset-20 bg-neon-orange/5 blur-[100px] rounded-full pointer-events-none" />
+        
+        <div className="mb-12 h-48 overflow-hidden text-[10px] text-neon-orange/60 space-y-2 border-l border-neon-orange/20 pl-4">
+          {logs.map((log, i) => (
+            <motion.div 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              key={i}
+              className="flex items-center gap-2"
+            >
+              <span className="text-neon-orange/30">[{new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+              {`> ${log}`}
+            </motion.div>
+          ))}
+        </div>
+        
+        <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+          <motion.div 
+            className="absolute inset-y-0 left-0 bg-neon-orange shadow-[0_0_15px_rgba(255,87,34,0.5)]"
+            initial={{ width: "0%" }}
+            animate={{ width: `${progress}%` }}
+            transition={{ type: "spring", bounce: 0, duration: 0.1 }}
+          />
+        </div>
+        
+        <div className="mt-6 flex justify-between items-center">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-neon-orange font-black">System Boot</span>
+            <span className="text-[8px] text-white/20 uppercase tracking-widest mt-1">Kernel v4.2.0-silicon</span>
+          </div>
+          <span className="text-2xl font-black text-white tracking-tighter">{progress}%</span>
+        </div>
+
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: progress > 10 ? 0.3 : 0 }}
+          whileHover={{ opacity: 1 }}
+          onClick={onComplete}
+          className="absolute -bottom-24 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-white/40 hover:text-neon-orange transition-colors py-2 px-4 border border-white/10 rounded-full"
+        >
+          Skip Initialization
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+};
+
 const Hero = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.5,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid lg:grid-cols-2 gap-16 items-center"
+        >
+          <motion.div variants={itemVariants} transition={{ duration: 0.8, ease: "easeOut" }}>
             <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              variants={itemVariants}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-bold uppercase tracking-widest mb-8"
             >
-              <Zap size={14} className="text-yellow-400" />
+              <Zap size={14} className="text-neon-orange" />
               VIT Chennai's Premier VLSI Club
             </motion.div>
-            <h1 className="text-7xl md:text-8xl font-black tracking-tighter leading-[0.85] mb-8 group cursor-default">
-              <span className="relative inline-block">
-                Silicon
-                <span className="absolute top-0 left-0 -ml-[1px] text-neon-orange opacity-0 group-hover:opacity-50 group-hover:translate-x-[2px] transition-all duration-75 pointer-events-none">Silicon</span>
-                <span className="absolute top-0 left-0 ml-[1px] text-blue-500 opacity-0 group-hover:opacity-50 group-hover:-translate-x-[2px] transition-all duration-75 pointer-events-none">Silicon</span>
-              </span>
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600 relative inline-block">
-                Architects.
-                <span className="absolute top-0 left-0 -ml-[1px] text-neon-orange opacity-0 group-hover:opacity-30 group-hover:translate-x-[1px] transition-all duration-100 pointer-events-none">Architects.</span>
-              </span>
+            
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] mb-8 group cursor-default">
+              <motion.div variants={itemVariants} transition={{ duration: 0.8, ease: "easeOut" }}>
+                <ScrambleText text="Silicon" className="block" />
+              </motion.div>
+              <motion.div variants={itemVariants} transition={{ duration: 0.8, ease: "easeOut" }}>
+                <ScrambleText text="Architects." className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600 block" />
+              </motion.div>
             </h1>
-            <p className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed font-medium">
+            
+            <motion.p variants={itemVariants} transition={{ duration: 0.8, ease: "easeOut" }} className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed font-medium">
               We are a community of hardware enthusiasts at VIT Chennai, dedicated to mastering VLSI design, architecture, and verification.
-            </p>
-            <div className="flex flex-wrap gap-5">
+            </motion.p>
+            
+            <motion.div variants={itemVariants} transition={{ duration: 0.8, ease: "easeOut" }} className="flex flex-wrap gap-5">
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById('recruitment')?.scrollIntoView({ behavior: 'smooth' })}
                 className="bg-white text-black px-10 py-5 rounded-2xl font-black flex items-center gap-3 hover:bg-gray-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)]"
               >
                 Join CDG <ArrowRight size={20} />
               </motion.button>
-            </div>
+              <motion.button 
+                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.05)' }}
+                whileTap={{ scale: 0.95 }}
+                className="border border-white/20 px-10 py-5 rounded-2xl font-black transition-all backdrop-blur-sm"
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                See Projects
+              </motion.button>
+            </motion.div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            variants={{
+              hidden: { opacity: 0, scale: 0.8, rotate: 5 },
+              visible: { opacity: 1, scale: 1, rotate: 0 }
+            }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
             className="relative"
           >
             <div className="absolute inset-0 bg-neon-orange/20 blur-[100px] rounded-full" />
             <Chip3D />
             
-            {/* Floating Stats or Labels around the chip */}
-            <div className="absolute -top-10 -right-10 bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] shadow-2xl">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.5 }}
+              className="absolute -top-10 -right-10 bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] shadow-2xl"
+            >
               <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Architecture</div>
               <div className="text-2xl font-black text-white tracking-tighter">7nm FinFET</div>
-            </div>
+            </motion.div>
 
-            <div className="absolute -bottom-10 -left-10 bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] shadow-2xl">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.7 }}
+              className="absolute -bottom-10 -left-10 bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] shadow-2xl"
+            >
               <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Efficiency</div>
               <div className="text-2xl font-black text-neon-orange tracking-tighter">99.8%</div>
-            </div>
+            </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
 
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 2 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-12 mt-24 border-t border-white/5 pt-16"
         >
           {STATS.map((stat, idx) => (
@@ -278,20 +544,29 @@ const Hero = () => {
   );
 };
 
-const SectionHeader = ({ subtitle, title }: { subtitle: string, title: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
+const SectionHeader = ({ subtitle, title, number }: { subtitle: string, title: string, number?: string }) => {
   return (
     <motion.div 
-      ref={ref}
       initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6 }}
-      className="mb-16"
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="relative mb-24"
     >
-      <h2 className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-4 italic">{subtitle}</h2>
-      <h3 className="text-5xl font-black tracking-tighter leading-none">{title}</h3>
+      {number && (
+        <div className="absolute -top-8 -left-8 text-[8rem] font-black text-white/[0.02] leading-none select-none pointer-events-none">
+          {number}
+        </div>
+      )}
+      
+      <div className="flex items-center gap-4 mb-6">
+        <div className="w-12 h-px bg-neon-orange" />
+        <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-neon-orange italic">{subtitle}</h2>
+      </div>
+      
+      <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] max-w-2xl text-white">
+        <ScrambleText text={title} />
+      </h3>
     </motion.div>
   );
 };
@@ -472,36 +747,72 @@ const RecapModal: React.FC<{ event: Event; onClose: () => void }> = ({ event, on
 
 const WhoWeAre = () => {
   return (
-    <section id="about" className="py-32 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row gap-20 items-start">
-          <div className="md:w-1/3 sticky top-32">
-            <SectionHeader subtitle="Who We Are" title="The Hardware Hub." />
-          </div>
-          <div className="md:w-2/3">
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-2xl text-gray-400 leading-relaxed mb-12 font-medium"
-            >
-              Chip Design Group (CDG) is a student-led technical organization focused on the vast domain of VLSI and Embedded Systems. We bridge the gap between academic theory and industry practice by working on real-world silicon design challenges.
-            </motion.p>
-            <div className="flex flex-wrap gap-3">
-              {TECH_STACK.map((tech, idx) => (
-                <motion.span 
-                  key={tech} 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="px-5 py-2 bg-white/5 border border-white/10 rounded-2xl text-xs font-mono font-bold text-gray-400 hover:border-white/30 hover:text-white transition-all cursor-default"
-                >
-                  {tech}
-                </motion.span>
+    <section id="about" className="py-32 px-6 relative">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Main Intro */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="md:col-span-2 md:row-span-2 p-12 rounded-[3rem] bg-white/[0.02] border border-white/10 flex flex-col justify-between"
+          >
+            <div>
+              <div className="text-[10px] font-black uppercase tracking-[0.4em] text-neon-orange mb-8">01 / Who We Are</div>
+              <h2 className="text-5xl font-black leading-none tracking-tighter uppercase mb-8">
+                The Core of <br /> Innovation
+              </h2>
+              <p className="text-xl text-white/60 leading-relaxed max-w-md">
+                Chip Design Group (CDG) is a premier student-led technical club at VIT Chennai, dedicated to the intricate world of VLSI and hardware design.
+              </p>
+            </div>
+            <div className="mt-12 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-neon-orange flex items-center justify-center">
+                <Zap size={20} />
+              </div>
+              <span className="text-sm font-bold uppercase tracking-widest">Est. 2024</span>
+            </div>
+          </motion.div>
+
+          {/* Stats Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="md:col-span-2 p-12 rounded-[3rem] bg-neon-orange text-black flex flex-col justify-between"
+          >
+            <div className="grid grid-cols-2 gap-8">
+              {STATS.map((stat, i) => (
+                <div key={i}>
+                  <div className="text-4xl font-black mb-1">{stat.value}</div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest opacity-70">{stat.label}</div>
+                </div>
               ))}
             </div>
-          </div>
+          </motion.div>
+
+          {/* Mission Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="p-10 rounded-[3rem] bg-white/[0.05] border border-white/10 flex flex-col justify-center items-center text-center"
+          >
+            <Globe className="text-neon-orange mb-4" size={32} />
+            <h3 className="text-lg font-bold uppercase tracking-widest mb-2">Global Vision</h3>
+            <p className="text-xs text-white/40">Preparing students for the global semiconductor industry.</p>
+          </motion.div>
+
+          {/* Community Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="p-10 rounded-[3rem] bg-white/[0.05] border border-white/10 flex flex-col justify-center items-center text-center"
+          >
+            <Users className="text-neon-orange mb-4" size={32} />
+            <h3 className="text-lg font-bold uppercase tracking-widest mb-2">50+ Members</h3>
+            <p className="text-xs text-white/40">A vibrant community of hardware enthusiasts.</p>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -596,6 +907,15 @@ const Departments = () => {
   const [activeDept, setActiveDept] = useState<any | null>(null);
   const [hoveredDeptId, setHoveredDeptId] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const bgY1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const bgY2 = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -607,16 +927,21 @@ const Departments = () => {
   const orbitRadius = 260;
 
   return (
-    <section id="departments" className="bg-[#050505] min-h-screen flex flex-col justify-center overflow-hidden relative py-20">
+    <section ref={sectionRef} id="departments" className="bg-[#050505] min-h-screen flex flex-col justify-center overflow-hidden relative py-20">
       
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px]"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px]"></div>
+          <motion.div 
+            style={{ y: bgY1 }}
+            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px]"
+          />
+          <motion.div 
+            style={{ y: bgY2 }}
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px]"
+          />
       </div>
 
-      <div className="text-center mb-12 relative z-10">
-        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-white/50 font-bold tracking-wider uppercase text-sm mb-2">Our Ecosystem</motion.h2>
-        <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-black text-white">Departments</motion.h3>
+      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-20">
+        <SectionHeader subtitle="Our Ecosystem" title="Specialised Departments." number="02" />
       </div>
 
       {isMobile ? (
@@ -809,9 +1134,7 @@ const Board = () => {
   return (
     <section id="board" className="py-32 bg-black">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-24 text-center">
-          <SectionHeader subtitle="Board & Leads" title="The Visionaries." />
-        </div>
+        <SectionHeader subtitle="Board & Leads" title="The Visionaries." number="03" />
 
         {BOARD.map((category, catIdx) => (
           <div key={catIdx} className="mb-32 last:mb-0">
@@ -854,6 +1177,306 @@ const Board = () => {
   );
 };
 
+
+const ProjectCard = ({ project, index, onOpen }: { project: any, index: number, onOpen: () => void }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const springX = useSpring(mouseX, { stiffness: 300, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 300, damping: 30 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const glowBackground = useTransform(
+    [springX, springY],
+    ([x, y]) => `radial-gradient(600px circle at ${x}px ${y}px, rgba(255,87,34,0.25), transparent 40%)`
+  );
+
+  const rotateX = useTransform(springY, [0, 450], [5, -5]);
+  const rotateY = useTransform(springX, [0, 400], [-5, 5]);
+  
+  return (
+    <motion.div 
+      className="relative h-[450px] [perspective:1500px] group"
+      onMouseEnter={() => setIsFlipped(true)}
+      onMouseLeave={() => setIsFlipped(false)}
+      onMouseMove={handleMouseMove}
+      onClick={onOpen}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.2 }}
+    >
+      {/* Outer Glow Effect */}
+      <motion.div 
+        className="absolute -inset-8 rounded-[4rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-3xl pointer-events-none z-0"
+        style={{ background: glowBackground }}
+      />
+
+      <motion.div
+        style={{ 
+          rotateX: isFlipped ? 0 : rotateX,
+          rotateY: isFlipped ? 180 : rotateY,
+        }}
+        animate={{ 
+          scale: isFlipped ? 1.02 : 1,
+          z: isFlipped ? 50 : 0
+        }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 150, 
+          damping: 15,
+          mass: 1
+        }}
+        className="w-full h-full relative [transform-style:preserve-3d] cursor-pointer z-10"
+      >
+        {/* Front Side */}
+        <div className="absolute inset-0 [backface-visibility:hidden] rounded-[3rem] overflow-hidden border border-white/10 bg-white/[0.02] backdrop-blur-sm group-hover:border-white/20 transition-colors">
+          <div className="absolute inset-0">
+            <img 
+              src={project.image} 
+              alt={project.name} 
+              className="w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-1000"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+            
+            {/* Shine Sweep Effect */}
+            <motion.div 
+              initial={{ x: '-100%' }}
+              animate={isFlipped ? { x: '100%' } : { x: '-100%' }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 pointer-events-none"
+            />
+          </div>
+          
+          <div className="absolute bottom-0 left-0 right-0 p-10">
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-[10px] font-black uppercase tracking-[0.4em] text-neon-orange mb-4"
+            >
+              {project.department}
+            </motion.div>
+            <h4 className="text-3xl font-black mb-4 tracking-tighter leading-none group-hover:text-neon-orange transition-colors">{project.name}</h4>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono text-white/40">{project.date}</span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-neon-orange animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{project.status}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Back Side */}
+        <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-[3rem] overflow-hidden border border-neon-orange/30 bg-black p-10 flex flex-col justify-between">
+          <div className="absolute inset-0 opacity-10">
+             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neon-orange/20 via-transparent to-transparent" />
+          </div>
+          
+          <div className="relative z-10">
+            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-8 italic">Project Brief</div>
+            <h4 className="text-2xl font-black mb-6 tracking-tight text-neon-orange">{project.name}</h4>
+            <p className="text-gray-400 leading-relaxed font-medium">
+              {project.description}
+            </p>
+          </div>
+
+          <div className="relative z-10 flex items-center justify-between pt-8 border-t border-white/5">
+            <div className="flex -space-x-3">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-black bg-white/10 overflow-hidden">
+                  <img src={`https://i.pravatar.cc/100?u=${project.name}${i}`} alt="member" referrerPolicy="no-referrer" />
+                </div>
+              ))}
+            </div>
+            <motion.button 
+              whileHover={{ scale: 1.1, x: 5 }}
+              className="w-14 h-14 rounded-2xl bg-neon-orange flex items-center justify-center text-white shadow-[0_0_30px_rgba(255,87,34,0.3)]"
+            >
+              <ExternalLink size={24} />
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const ProjectModal = ({ project, isOpen, onClose }: { project: any | null, isOpen: boolean, onClose: () => void }) => {
+  if (!project) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative w-full max-w-5xl bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden shadow-2xl max-h-[90vh] flex flex-col md:flex-row"
+          >
+            <button 
+              onClick={onClose}
+              className="absolute top-8 right-8 z-20 w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="w-full md:w-1/2 h-64 md:h-auto relative">
+              <img 
+                src={project.image} 
+                alt={project.name} 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent md:bg-gradient-to-r" />
+            </div>
+
+            <div className="w-full md:w-1/2 flex flex-col">
+              <div className="flex-1 p-10 md:p-16 overflow-y-auto">
+                <div className="text-xs font-black uppercase tracking-[0.4em] text-neon-orange mb-6">{project.department}</div>
+                <h2 className="text-4xl font-black mb-8 tracking-tighter leading-none">{project.name}</h2>
+                
+                <div className="flex items-center gap-6 mb-10">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={16} className="text-white/40" />
+                    <span className="text-sm font-bold text-white/60">{project.date}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-neon-orange animate-pulse" />
+                    <span className="text-sm font-bold text-white/60 uppercase tracking-widest">{project.status}</span>
+                  </div>
+                </div>
+
+                <p className="text-gray-400 text-lg leading-relaxed mb-12 font-medium">
+                  {project.longDescription || project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-4 mb-12">
+                  {project.githubUrl && project.githubUrl !== '#' && (
+                    <motion.a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center gap-3 bg-white text-black px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest"
+                    >
+                      <Github size={20} /> Repository
+                    </motion.a>
+                  )}
+                  {project.demoUrl && project.demoUrl !== '#' && (
+                    <motion.a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center gap-3 border border-white/10 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/5 transition-all"
+                    >
+                      <ExternalLink size={20} /> Live Demo
+                    </motion.a>
+                  )}
+                </div>
+              </div>
+
+              {/* Technical Specs Sidebar/Footer */}
+              {project.techSpecs && (
+                <div className="p-10 bg-white/[0.02] border-t border-white/10">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-6">Technical Specs</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Architecture</div>
+                      <div className="text-sm font-bold text-white tracking-tight">{project.techSpecs.architecture}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Tools & Languages</div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.techSpecs.tools.map((tool: string) => (
+                          <span key={tool} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] font-bold text-white/60">
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Performance</div>
+                      <div className="text-sm font-bold text-white tracking-tight">{project.techSpecs.performance}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Projects = () => {
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], ["1%", "-60%"]);
+
+  return (
+    <section id="projects" ref={targetRef} className="relative h-[300vh] bg-[#050505]">
+      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 w-full relative z-10 mb-12">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
+            <SectionHeader subtitle="Portfolio" title="Silicon Masterpieces." number="04" />
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-8"
+            >
+              <div className="text-right hidden sm:block">
+                <div className="text-2xl font-black text-white">10+</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Active Projects</div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <motion.div style={{ x }} className="flex gap-10 px-6">
+          {PROJECTS.map((project, idx) => (
+            <div key={idx} className="min-w-[400px] md:min-w-[500px]">
+              <ProjectCard 
+                project={project} 
+                index={idx} 
+                onOpen={() => setSelectedProject(project)}
+              />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      <ProjectModal 
+        project={selectedProject} 
+        isOpen={!!selectedProject} 
+        onClose={() => setSelectedProject(null)} 
+      />
+    </section>
+  );
+};
 
 const AdminModal: React.FC<{ 
   isOpen: boolean; 
@@ -927,7 +1550,7 @@ const EventsTimeline = () => {
     <section id="events" className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
-          <SectionHeader subtitle="Events & Workshops" title="Our Journey." />
+          <SectionHeader subtitle="Events & Workshops" title="Our Journey." number="05" />
           
           <div className="flex items-center gap-4">
             {isAdmin && (
@@ -1039,51 +1662,65 @@ const EventsTimeline = () => {
 
 const Recruitment = () => {
   return (
-    <section className="py-32">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-[4rem] p-12 md:p-24 text-black relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-black/5 rounded-full blur-3xl -mr-64 -mt-64"></div>
-          
-          <div className="relative z-10 max-w-4xl">
-            <h2 className="text-xs font-black uppercase tracking-[0.4em] text-black/30 mb-8 italic">Recruitment</h2>
-            <h3 className="text-6xl md:text-7xl font-black tracking-tighter mb-10 leading-[0.9]">Join the Silicon <br />Revolution.</h3>
-            <p className="text-2xl text-black/60 mb-16 leading-relaxed font-medium">
-              We're looking for passionate individuals who want to push the boundaries of hardware design. Whether you're a Verilog wizard or a creative coordinator, there's a place for you.
-            </p>
+    <section id="recruitment" className="py-32 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Main Call to Action */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="md:col-span-2 p-12 md:p-20 rounded-[4rem] bg-white text-black flex flex-col justify-between relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-96 h-96 bg-black/5 rounded-full blur-3xl -mr-32 -mt-32" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-px bg-black" />
+                <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-black/40 italic">Recruitment</h2>
+              </div>
+              <h3 className="text-4xl md:text-6xl font-black tracking-tighter mb-10 leading-[0.9]">
+                <ScrambleText text="Join the Silicon Revolution." />
+              </h3>
+              <p className="text-xl text-black/60 mb-16 leading-relaxed font-medium max-w-xl">
+                We're looking for passionate individuals who want to push the boundaries of hardware design. Whether you're a Verilog wizard or a creative coordinator, there's a place for you.
+              </p>
 
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
-              {OPEN_ROLES.map((role, idx) => (
-                <motion.div 
-                  key={idx} 
-                  whileHover={{ y: -5 }}
-                  className="p-8 bg-black/5 rounded-3xl border border-black/10"
+              <div className="flex flex-col sm:flex-row items-center gap-10">
+                <motion.a 
+                  href="https://forms.gle/placeholder" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full sm:w-auto bg-black text-white px-12 py-6 rounded-[2rem] font-black text-lg flex items-center justify-center gap-3 shadow-2xl"
                 >
-                  <h4 className="text-xl font-black mb-3 tracking-tight">{role.title}</h4>
-                  <p className="text-sm text-black/50 leading-relaxed font-medium">{role.description}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-10">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto bg-black text-white px-12 py-6 rounded-[2rem] font-black text-lg flex items-center justify-center gap-3 shadow-2xl"
-              >
-                Apply via Google Form <ExternalLink size={22} />
-              </motion.button>
-              <div className="flex items-center gap-3 text-black/40 font-bold uppercase tracking-widest text-xs">
-                <Clock size={16} />
-                Applications close April 5th
+                  Apply Now <ExternalLink size={22} />
+                </motion.a>
+                <div className="flex items-center gap-3 text-black/40 font-bold uppercase tracking-widest text-xs">
+                  <Clock size={16} />
+                  Applications close April 5th
+                </div>
               </div>
             </div>
+          </motion.div>
+
+          {/* Roles Grid */}
+          <div className="grid grid-cols-1 gap-6">
+            {OPEN_ROLES.map((role, idx) => (
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ y: -5, borderColor: 'rgba(255,255,255,0.2)' }}
+                className="p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem] flex flex-col justify-center"
+              >
+                <h4 className="text-xl font-black mb-3 tracking-tight text-white">{role.title}</h4>
+                <p className="text-sm text-white/40 leading-relaxed font-medium">{role.description}</p>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -1111,6 +1748,9 @@ const Footer = () => {
               <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
               <li><a href="#departments" className="hover:text-white transition-colors">Departments</a></li>
               <li><a href="#board" className="hover:text-white transition-colors">Board Members</a></li>
+              <li><a href="#projects" className="hover:text-white transition-colors">Projects</a></li>
+              <li><a href="#events" className="hover:text-white transition-colors">Events</a></li>
+              <li><a href="#recruitment" className="hover:text-white transition-colors">Recruitment</a></li>
             </ul>
           </div>
           <div>
@@ -1148,30 +1788,95 @@ const Footer = () => {
   );
 };
 
+const ContentReveal = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.2,
+            delayChildren: 0.3,
+          },
+        },
+      }}
+      className="relative"
+    >
+      {/* Scanline Effect during reveal */}
+      <motion.div
+        initial={{ top: "-100%" }}
+        animate={{ top: "100%" }}
+        transition={{ duration: 2, ease: "easeInOut" }}
+        className="fixed inset-0 z-[9999] pointer-events-none bg-gradient-to-b from-transparent via-neon-orange/30 to-transparent h-[20vh] blur-md"
+      />
+      
+      {/* Digital Noise Overlay */}
+      <motion.div
+        initial={{ opacity: 0.2 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 1.5, delay: 0.5 }}
+        className="fixed inset-0 z-[9998] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"
+      />
+
+      {/* Grid Reveal Overlay */}
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 1.2, delay: 0.2, ease: "circOut" }}
+        className="fixed inset-0 z-[9997] pointer-events-none bg-black"
+      />
+
+      {/* Subtle Background Expansion */}
+      <motion.div
+        initial={{ scale: 1.1, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="fixed inset-0 z-[-1] pointer-events-none"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,87,34,0.03)_0%,transparent_70%)]" />
+      </motion.div>
+
+      {children}
+    </motion.div>
+  );
+};
+
 export default function App() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadingComplete = useCallback(() => {
+    setIsLoading(false);
+  }, []);
 
   return (
     <AdminProvider>
-      <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-white selection:text-black">
-        {/* Progress Bar */}
-        <motion.div 
-          className="fixed top-0 left-0 right-0 h-1 bg-white z-[60] origin-left"
-          style={{ scaleX }}
-        />
-        
-        <Nav />
-        <main>
-          <Hero />
-          <WhoWeAre />
-          <Departments />
-          <Board />
-          <EventsTimeline />
-          <Recruitment />
-        </main>
-        <Footer />
-      </div>
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <LoadingScreen key="loader" onComplete={handleLoadingComplete} />
+        ) : (
+          <ContentReveal key="main-content">
+            <CustomCursor />
+            <InteractiveBackground />
+
+            <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-white selection:text-black">
+              <Nav />
+              <main>
+                <Hero />
+                <WhoWeAre />
+                <Departments />
+                <Projects />
+                <Board />
+                <EventsTimeline />
+                <Recruitment />
+              </main>
+              <Footer />
+            </div>
+          </ContentReveal>
+        )}
+      </AnimatePresence>
     </AdminProvider>
   );
 }

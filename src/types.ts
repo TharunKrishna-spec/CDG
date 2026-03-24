@@ -16,6 +16,23 @@ export interface BoardMember {
   department?: string;
 }
 
+export interface Project {
+  name: string;
+  department: string;
+  status: 'Completed' | 'Ongoing' | 'Upcoming';
+  date: string;
+  description?: string;
+  longDescription?: string;
+  image?: string;
+  githubUrl?: string;
+  demoUrl?: string;
+  techSpecs?: {
+    architecture: string;
+    tools: string[];
+    performance: string;
+  };
+}
+
 export interface Event {
   id: string;
   title: string;
