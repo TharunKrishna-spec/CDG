@@ -38,9 +38,13 @@ const DataParticles = () => {
       dummy.scale.set(s, s, s);
       dummy.rotation.set(t, t, t);
       dummy.updateMatrix();
-      meshRef.current!.setMatrixAt(i, dummy.matrix);
+      if (meshRef.current) {
+        meshRef.current.setMatrixAt(i, dummy.matrix);
+      }
     });
-    meshRef.current!.instanceMatrix.needsUpdate = true;
+    if (meshRef.current) {
+      meshRef.current.instanceMatrix.needsUpdate = true;
+    }
   });
 
   return (
@@ -155,18 +159,6 @@ const ChipModel = () => {
         <meshBasicMaterial color="#FF6321" transparent opacity={0.6} />
       </mesh>
       
-      {/* Core Text */}
-      <Text
-        position={[0, 0, 0.17]}
-        fontSize={0.15}
-        color="white"
-        font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff"
-        anchorX="center"
-        anchorY="middle"
-      >
-        CDG-VLSI
-      </Text>
-
       {/* Traces */}
       {traces.map((trace, i) => (
         <mesh key={i} position={trace.position} rotation={trace.rotation} scale={trace.scale}>
