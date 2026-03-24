@@ -123,7 +123,7 @@ const ChipModel = () => {
 
 export const Chip3D = () => {
   return (
-    <div className="w-full h-[520px] relative">
+    <div className="w-full h-[320px] md:h-[520px] relative">
       <Canvas
         dpr={[1, 1.25]}
         gl={{ antialias: false, powerPreference: 'high-performance' }}

@@ -13,7 +13,7 @@ const getInitials = (name: string) =>
 
 export const Board = () => {
   return (
-    <section id="board" className="chip-section py-32 bg-black relative overflow-hidden">
+    <section id="board" className="chip-section py-16 md:py-32 bg-black relative overflow-hidden">
       {/* Spotlight background effect */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-neon-orange/[0.02] blur-[150px] rounded-full" />
@@ -23,18 +23,18 @@ export const Board = () => {
         <SectionHeader subtitle="Board & Leads" title="The Visionaries." number="03" />
 
         {BOARD.map((category, catIdx) => (
-          <div key={catIdx} className="mb-32 last:mb-0">
+          <div key={catIdx} className="mb-16 md:mb-32 last:mb-0">
             <motion.h4 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="text-xs font-black uppercase tracking-[0.5em] text-white/20 mb-16 text-center flex items-center justify-center gap-8"
+              className="text-xs font-black uppercase tracking-[0.5em] text-white/20 mb-8 md:mb-16 text-center flex items-center justify-center gap-4 md:gap-8"
             >
-              <span className="h-px w-24 bg-white/10"></span>
+              <span className="h-px w-12 md:w-24 bg-white/10"></span>
               {category.category}
-              <span className="h-px w-24 bg-white/10"></span>
+              <span className="h-px w-12 md:w-24 bg-white/10"></span>
             </motion.h4>
-            <div className="flex flex-wrap justify-center gap-12">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-12">
               {category.members.map((member, memIdx) => (
                 <motion.div 
                   key={memIdx} 
@@ -43,7 +43,7 @@ export const Board = () => {
                   viewport={{ once: true }}
                   transition={{ delay: memIdx * 0.1, duration: 0.6 }}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="chip-surface w-[260px] rounded-[2rem] p-6 text-center group cursor-default"
+                  className="chip-surface w-full sm:w-[260px] rounded-[2rem] p-6 text-center group cursor-default"
                 >
                   <div className="relative mb-6">
                     <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-[1.75rem] border border-[#e18233]/25 bg-[linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.015))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-500 group-hover:border-neon-orange/45 group-hover:shadow-[0_0_30px_rgba(255,87,34,0.18)]">

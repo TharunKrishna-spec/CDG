@@ -6,7 +6,7 @@ import { ScrambleText } from './shared';
 
 export const Recruitment = () => {
   return (
-    <section id="recruitment" className="chip-section py-16 px-6 relative overflow-hidden">
+    <section id="recruitment" className="chip-section py-12 px-4 md:py-16 md:px-6 relative overflow-hidden">
       <div className="w-full px-4 md:px-8 xl:px-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Main CTA */}

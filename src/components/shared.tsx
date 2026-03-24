@@ -51,10 +51,10 @@ export const SectionHeader = ({ subtitle, title, number }: { subtitle: string; t
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="relative mb-24"
+      className="relative mb-12 md:mb-24"
     >
       {number && (
-        <div className="absolute -top-8 -left-4 text-[7rem] font-black text-[#e18233]/[0.08] leading-none select-none pointer-events-none">
+        <div className="absolute -top-8 -left-4 text-[4rem] md:text-[7rem] font-black text-[#e18233]/[0.08] leading-none select-none pointer-events-none">
           {number}
         </div>
       )}
@@ -62,7 +62,7 @@ export const SectionHeader = ({ subtitle, title, number }: { subtitle: string; t
         <div className="w-14 h-px bg-gradient-to-r from-neon-orange to-transparent" />
         <h2 className="trace-label text-neon-orange">{subtitle}</h2>
       </div>
-      <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] max-w-4xl text-white uppercase">
+      <h3 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] max-w-4xl text-white uppercase">
         <ScrambleText text={title} />
       </h3>
     </motion.div>

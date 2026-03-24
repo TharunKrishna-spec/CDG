@@ -23,9 +23,9 @@ export const Nav = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-700 ${isScrolled ? 'py-4' : 'py-8'}`}>
-      <div className="w-full px-4 md:px-8 xl:px-10">
-        <div className={`relative flex justify-between items-center px-8 py-4 rounded-[1.75rem] transition-all duration-500 border ${isScrolled ? 'chip-surface bg-black/55 backdrop-blur-2xl border-[#e18233]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'bg-transparent border-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-700 ${isScrolled ? 'py-2 md:py-4' : 'py-4 md:py-8'}`}>
+      <div className="w-full px-3 md:px-8 xl:px-10">
+        <div className={`relative flex justify-between items-center px-4 md:px-8 py-3 md:py-4 rounded-[1.75rem] transition-all duration-500 border ${isScrolled ? 'chip-surface bg-black/55 backdrop-blur-2xl border-[#e18233]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'bg-transparent border-transparent'}`}>
           <motion.div 
             className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-neon-orange to-transparent opacity-50"
             style={{ scaleX, transformOrigin: 'left' }}
@@ -88,7 +88,7 @@ export const Nav = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-6 right-6 mt-4 bg-black/95 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-10 md:hidden flex flex-col gap-8 shadow-2xl overflow-hidden z-50"
+            className="absolute top-full left-3 right-3 mt-3 bg-black/95 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-8 md:hidden flex flex-col gap-6 shadow-2xl overflow-hidden z-50"
           >
             <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 mb-2 italic">Navigation Menu</div>
             {navLinks.map((link, idx) => (

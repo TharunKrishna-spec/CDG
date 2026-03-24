@@ -31,12 +31,12 @@ export const Footer = () => {
   );
 
   return (
-    <footer id="footer" ref={footerRef} className="chip-section bg-black border-t border-white/5 pt-20 pb-10 relative overflow-hidden">
+    <footer id="footer" ref={footerRef} className="chip-section bg-black border-t border-white/5 pt-12 pb-8 md:pt-20 md:pb-10 relative overflow-hidden">
       <motion.div className="absolute inset-0 pointer-events-none" style={{ background: holoGradient }} />
 
       <div className="w-full px-4 md:px-8 xl:px-10 relative z-10">
-        <div className="grid md:grid-cols-4 gap-12 mb-16">
-          <div className="col-span-2">
+        <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
+          <div className="md:col-span-2">
             <div className="flex items-center gap-4 mb-6">
               <motion.div
                 animate={{ rotate: [0, 5, -5, 0] }}

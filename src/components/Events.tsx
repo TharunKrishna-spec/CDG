@@ -165,9 +165,9 @@ export const EventsTimeline = () => {
   };
 
   return (
-    <section ref={sectionRef} id="events" className="chip-section py-32 relative overflow-hidden">
+    <section ref={sectionRef} id="events" className="chip-section py-16 md:py-32 relative overflow-hidden">
       <div className="w-full px-4 md:px-8 xl:px-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-12 md:mb-20">
           <SectionHeader subtitle="Events & Workshops" title="Our Journey." number="05" />
           <div className="flex items-center gap-4">
             {isAdmin && (
