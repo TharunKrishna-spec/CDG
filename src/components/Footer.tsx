@@ -45,7 +45,7 @@ export const Footer = () => {
               >
                 <img src="/cdg-logo.jpeg" alt="CDG logo" className="h-full w-full object-cover" />
               </motion.div>
-              <span className="font-black text-xl tracking-tight">Circuit Development Guild</span>
+              <span className="font-black text-xl tracking-tight">Circuit Designers Guild</span>
             </div>
             <p className="text-gray-500 max-w-sm text-base leading-relaxed font-medium">
               The premier VLSI and hardware design club at VIT Chennai. Building the next generation of silicon engineers.
@@ -81,7 +81,7 @@ export const Footer = () => {
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-gray-600 font-bold tracking-widest uppercase">
-            Copyright 2026 Circuit Development Guild. All rights reserved.
+            Copyright 2026 Circuit Designers Guild. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
             <div className="text-sm text-gray-600 font-black tracking-[0.3em] uppercase">VIT Chennai</div>

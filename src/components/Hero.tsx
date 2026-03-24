@@ -36,7 +36,7 @@ export const Hero = () => {
               </motion.div>
               <motion.div variants={itemVariants} transition={{ duration: 0.8 }}>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-orange via-orange-300 to-amber-400 block">
-                  <ScrambleText text="Development Guild." />
+                  <ScrambleText text="Designers Guild." />
                 </span>
               </motion.div>
             </h1>
@@ -71,7 +71,7 @@ export const Hero = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: "easeOut", delay: 0.45 }}
-            className="relative hidden lg:block"
+            className="relative hidden lg:block w-full max-w-[640px] min-h-[520px] mx-auto"
           >
             <div className="absolute inset-0 bg-neon-orange/8 blur-[72px] rounded-full scale-125" />
             <Chip3D />

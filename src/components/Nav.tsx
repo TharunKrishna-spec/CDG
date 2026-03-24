@@ -42,7 +42,7 @@ export const Nav = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-black text-lg tracking-tighter leading-none">CDG</span>
-              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 leading-none mt-1">Circuit Development Guild</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 leading-none mt-1">Circuit Designers Guild</span>
             </div>
           </motion.div>
 

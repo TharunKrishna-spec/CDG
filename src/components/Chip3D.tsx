@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -122,12 +122,44 @@ const ChipModel = () => {
 };
 
 export const Chip3D = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canvasKey, setCanvasKey] = useState(0);
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    let frame = 0;
+    const syncCanvas = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        setCanvasKey((current) => current + 1);
+      });
+    };
+
+    syncCanvas();
+
+    const observer = new ResizeObserver(() => {
+      syncCanvas();
+    });
+
+    observer.observe(node);
+    window.addEventListener('load', syncCanvas);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('load', syncCanvas);
+    };
+  }, []);
+
   return (
-    <div className="w-full h-[320px] md:h-[520px] relative">
+    <div ref={containerRef} className="relative w-full h-[320px] md:h-[520px] min-h-[320px] md:min-h-[520px]">
+      <div key={canvasKey} className="h-full w-full [&>canvas]:!h-full [&>canvas]:!w-full [&>canvas]:!block">
       <Canvas
         dpr={[1, 1.25]}
         gl={{ antialias: false, powerPreference: 'high-performance' }}
-        camera={{ position: [0, 0, 5.2], fov: 36 }}
+        camera={{ position: [0, 0, 4.6], fov: 34 }}
       >
         <color attach="background" args={['#120d0a']} />
         <ambientLight intensity={0.9} />
@@ -135,6 +167,7 @@ export const Chip3D = () => {
         <pointLight position={[-3, -2, 3]} intensity={0.5} color="#ff7a2f" />
         <ChipModel />
       </Canvas>
+      </div>
       
       <div className="absolute inset-0 pointer-events-none rounded-[2.5rem] overflow-hidden border border-white/6 bg-gradient-to-b from-white/[0.02] to-transparent">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-orange/30 to-transparent" />
