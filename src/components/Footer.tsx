@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Globe, Github, Linkedin, Mail } from 'lucide-react';
+import { Globe, Instagram, Linkedin } from 'lucide-react';
 
 export const Footer = () => {
   const mouseX = useMotionValue(0.5);
@@ -45,7 +45,7 @@ export const Footer = () => {
               >
                 <img src="/cdg-logo.jpeg" alt="CDG logo" className="h-full w-full object-cover" />
               </motion.div>
-              <span className="font-black text-xl tracking-tight">Circuit Designers Guild</span>
+              <span className="font-black text-xl tracking-tight">Chip Designers Guild</span>
             </div>
             <p className="text-gray-500 max-w-sm text-base leading-relaxed font-medium">
               The premier VLSI and hardware design club at VIT Chennai. Building the next generation of silicon engineers.
@@ -65,7 +65,7 @@ export const Footer = () => {
           <div>
             <h5 className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-6 italic">Connect</h5>
             <div className="flex gap-4">
-              {[Linkedin, Github, Mail].map((Icon, idx) => (
+              {[Linkedin, Instagram].map((Icon, idx) => (
                 <motion.a
                   key={idx}
                   href="#"
@@ -81,7 +81,7 @@ export const Footer = () => {
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-gray-600 font-bold tracking-widest uppercase">
-            Copyright 2026 Circuit Designers Guild. All rights reserved.
+            Copyright 2026 Chip Designers Guild. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
             <div className="text-sm text-gray-600 font-black tracking-[0.3em] uppercase">VIT Chennai</div>

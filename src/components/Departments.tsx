@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { Cpu, ShieldCheck, Layers, Settings, ArrowRight, X } from 'lucide-react';
+import { Cpu, ShieldCheck, Layers, Settings, Image as ImageIcon, ArrowRight, X } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import { SectionHeader } from './shared';
 
@@ -19,6 +19,7 @@ const DeptIcon3D = ({ iconName, colorClass, isHovered, className = "w-28 h-28" }
       case 'ShieldCheck': return ShieldCheck;
       case 'Layers': return Layers;
       case 'Settings': return Settings;
+      case 'ImageIcon': return ImageIcon;
       default: return Cpu;
     }
   };

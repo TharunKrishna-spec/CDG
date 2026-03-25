@@ -32,7 +32,7 @@ export const Hero = () => {
             
             <h1 className="text-4xl sm:text-5xl md:text-8xl font-black tracking-tighter leading-[0.85] mb-6 md:mb-10 cursor-default">
               <motion.div variants={itemVariants} transition={{ duration: 0.8 }}>
-                <ScrambleText text="Circuit" className="block" />
+                  <ScrambleText text="Chip" className="block" />
               </motion.div>
               <motion.div variants={itemVariants} transition={{ duration: 0.8 }}>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-orange via-orange-300 to-amber-400 block">

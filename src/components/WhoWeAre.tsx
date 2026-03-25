@@ -47,7 +47,7 @@ export const WhoWeAre = () => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-orange to-amber-400">Innovation</span>
               </h2>
               <p className="text-lg md:text-xl text-white/50 leading-relaxed max-w-lg font-medium">
-                Circuit Designers Guild (CDG) is a premier student-led technical club at VIT Chennai, dedicated to the intricate world of VLSI and hardware design.
+                Chip Designers Guild (CDG) is a premier student-led technical club at VIT Chennai, dedicated to the intricate world of VLSI and hardware design.
               </p>
             </div>
             <div className="mt-12 flex items-center gap-5">

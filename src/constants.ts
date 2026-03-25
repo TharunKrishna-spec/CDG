@@ -2,7 +2,7 @@ import { Stat, Department, BoardMember, Project, Event, OpenRole } from './types
 
 export const STATS: Stat[] = [
   { label: 'Members', value: '50+' },
-  { label: 'Departments', value: '4' },
+  { label: 'Departments', value: '5' },
   { label: 'Active Projects', value: '10+' },
   { label: 'Workshops Run', value: '15+' },
 ];
@@ -28,29 +28,35 @@ export const DEPARTMENTS: Department[] = [
     description: 'Oversees the integration of various components and manages the club operations and infrastructure.',
     icon: 'Settings',
   },
+  {
+    name: 'Social Media',
+    description: 'Handles outreach, content, design communication, and the public voice of the club across digital platforms.',
+    icon: 'ImageIcon',
+  },
 ];
 
 export const BOARD: { category: string; members: BoardMember[] }[] = [
-  {
-    category: 'Faculty Advisor',
-    members: [{ name: 'Dr. S. Ramesh', role: 'Faculty Advisor' }],
-  },
   {
     category: 'Executive Board',
     members: [
       { name: 'Jagadhish', role: 'President' },
       { name: 'JP Anirudh', role: 'Vice President' },
-      { name: 'Rahul Verma', role: 'VP Operations' },
-      { name: 'Sneha Reddy', role: 'VP Outreach' },
     ],
   },
   {
     category: 'Department Leads',
     members: [
-      { name: 'Aditya Raj', role: 'Lead', department: 'RTL Design' },
+      { name: 'Joshitha', role: 'Lead', department: 'RTL Design' },
+      { name: 'Mahesh', role: 'Co-Lead', department: 'RTL Design' },
+      { name: 'Akhilesh', role: 'Co-Lead', department: 'RTL Design' },
+      { name: 'Annie Roslin', role: 'Lead', department: 'Physical Design' },
+      { name: 'Azar', role: 'Co-Lead', department: 'Physical Design' },
+      { name: 'Shakthi', role: 'Co-Lead', department: 'Physical Design' },
       { name: 'Eashwar', role: 'Lead', department: 'Design Verification' },
-      { name: 'Karthik S', role: 'Lead', department: 'Physical Design' },
-      { name: 'Megha Nair', role: 'Lead', department: 'System Management' },
+      { name: 'Madhumitha', role: 'Co-Lead', department: 'Design Verification' },
+      { name: 'Madheswar', role: 'Lead', department: 'System Management' },
+      { name: 'Arvindh Arjun', role: 'Lead', department: 'Social Media' },
+      { name: 'Dinesh Raja', role: 'Co-Lead', department: 'Social Media' },
     ],
   },
 ];
@@ -181,6 +187,10 @@ export const OPEN_ROLES: OpenRole[] = [
   {
     title: 'System Management Member',
     description: 'Support club infrastructure, tooling, and coordination across projects and operations.',
+  },
+  {
+    title: 'Social Media Member',
+    description: 'Work on outreach, branding, content creation, and public engagement for the club.',
   },
 ];
 
