@@ -126,10 +126,13 @@ export const Chip3D = () => {
   const [canvasKey, setCanvasKey] = useState(0);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const node = containerRef.current;
     if (!node) return;
 
     let frame = 0;
+    let observer: ResizeObserver | null = null;
     const syncCanvas = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
@@ -139,16 +142,19 @@ export const Chip3D = () => {
 
     syncCanvas();
 
-    const observer = new ResizeObserver(() => {
-      syncCanvas();
-    });
+    if (typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(() => {
+        syncCanvas();
+      });
 
-    observer.observe(node);
+      observer.observe(node);
+    }
+
     window.addEventListener('load', syncCanvas);
 
     return () => {
       cancelAnimationFrame(frame);
-      observer.disconnect();
+      observer?.disconnect();
       window.removeEventListener('load', syncCanvas);
     };
   }, []);
