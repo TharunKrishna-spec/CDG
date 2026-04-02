@@ -143,7 +143,10 @@ export const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-  const carouselProjects = useMemo(() => [...PROJECTS, ...PROJECTS], []);
+  const carouselProjects = useMemo(
+    () => (PROJECTS.length > 1 ? [...PROJECTS, ...PROJECTS] : PROJECTS),
+    []
+  );
 
   return (
     <section id="projects" className="chip-section relative py-32 bg-[#050505]">
@@ -152,7 +155,7 @@ export const Projects = () => {
           <SectionHeader subtitle="Portfolio" title="Silicon Masterpieces." number="04" />
           <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} className="flex items-center gap-8">
             <div className="text-right hidden sm:block">
-              <div className="text-2xl font-black text-white">10+</div>
+              <div className="text-2xl font-black text-white">{PROJECTS.length}</div>
               <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Active Projects</div>
             </div>
           </motion.div>

@@ -1,10 +1,10 @@
 import { Stat, Department, BoardMember, Project, Event, OpenRole } from './types';
 
 export const STATS: Stat[] = [
-  { label: 'Members', value: '50+' },
+  { label: 'Members', value: '15' },
   { label: 'Departments', value: '5' },
-  { label: 'Active Projects', value: '10+' },
-  { label: 'Workshops Run', value: '15+' },
+  { label: 'Active Projects', value: '2' },
+  { label: 'Workshops Run', value: '1' },
 ];
 
 export const DEPARTMENTS: Department[] = [
@@ -33,97 +33,48 @@ export const DEPARTMENTS: Department[] = [
     description: 'Handles outreach, content, design communication, and the public voice of the club across digital platforms.',
     icon: 'ImageIcon',
   },
+  {
+    name: 'Software',
+    description: 'Handles firmware development, tooling, and software support for hardware and system bring-up.',
+    icon: 'Code2',
+  },
 ];
 
 export const BOARD: { category: string; members: BoardMember[] }[] = [
   {
     category: 'Executive Board',
     members: [
-      { name: 'Jagadhish', role: 'President' },
-      { name: 'JP Anirudh', role: 'Vice President' },
+      { name: 'Jegadiswar', role: 'Captain' },
+      { name: 'Anirudh Purushothaman', role: 'Vice Captain' },
     ],
   },
   {
     category: 'Department Leads',
     members: [
-      { name: 'Joshitha', role: 'Lead', department: 'RTL Design' },
-      { name: 'Mahesh', role: 'Co-Lead', department: 'RTL Design' },
-      { name: 'Akhilesh', role: 'Co-Lead', department: 'RTL Design' },
-      { name: 'Annie Roslin', role: 'Lead', department: 'Physical Design' },
-      { name: 'Azar', role: 'Co-Lead', department: 'Physical Design' },
-      { name: 'Shakthi', role: 'Co-Lead', department: 'Physical Design' },
-      { name: 'Eashwar', role: 'Lead', department: 'Design Verification' },
-      { name: 'Madhumitha', role: 'Co-Lead', department: 'Design Verification' },
-      { name: 'Madheswar', role: 'Lead', department: 'System Management' },
-      { name: 'Arvindh Arjun', role: 'Lead', department: 'Social Media' },
-      { name: 'Dinesh Raja', role: 'Co-Lead', department: 'Social Media' },
+      { name: 'Joshittha', role: 'Lead', department: 'RTL Design' },
+      { name: 'Magesh', role: 'Co-Lead', department: 'RTL Design' },
+      { name: 'Arvindh Arjun', role: 'Co-Lead', department: 'Design Verification' },
+      { name: 'Mithreya', role: 'Lead', department: 'Social Media' },
+      { name: 'Tharun Krishna', role: 'Software Lead' },
     ],
   },
 ];
 
 export const PROJECTS: Project[] = [
   {
-    name: 'RISC-V Core Implementation',
+    name: 'Low Power NPU with SNN Accelerator in IBEX RISC-V',
     department: 'RTL Design',
     status: 'Ongoing',
-    date: 'Mar 2026',
-    description: 'A 5-stage pipelined RISC-V processor supporting the RV32I base integer instruction set.',
-    longDescription: 'This project focuses on designing a high-performance, 5-stage pipelined RISC-V processor from scratch. It supports the RV32I base integer instruction set and is optimized for low power consumption. The implementation includes a comprehensive ALU, register file, and control unit, all written in SystemVerilog. We are currently working on adding support for the M-extension (integer multiplication and division).',
-    image: 'https://picsum.photos/seed/riscv/800/600',
-    githubUrl: 'https://github.com/cdg-vitc/riscv-core',
-    demoUrl: '#',
-    techSpecs: {
-      architecture: 'RISC-V (RV32I)',
-      tools: ['SystemVerilog', 'Vivado', 'Verilator'],
-      performance: '5-stage Pipeline, 100MHz target'
-    }
-  },
-  {
-    name: 'UVM Testbench for SPI',
-    department: 'Design Verification',
-    status: 'Completed',
-    date: 'Jan 2026',
-    description: 'Comprehensive verification environment for an SPI controller using Universal Verification Methodology.',
-    longDescription: 'A robust verification environment built using the Universal Verification Methodology (UVM) to verify a complex SPI controller. The testbench includes a complete set of UVM components: agents, drivers, monitors, scoreboards, and sequences. We achieved 100% functional and code coverage, ensuring the reliability of the SPI controller under various edge cases and stress conditions.',
-    image: 'https://picsum.photos/seed/uvm/800/600',
-    githubUrl: 'https://github.com/cdg-vitc/uvm-spi-testbench',
-    demoUrl: '#',
-    techSpecs: {
-      architecture: 'UVM 1.2',
-      tools: ['Questasim', 'SystemVerilog', 'Python'],
-      performance: '100% Functional Coverage'
-    }
-  },
-  {
-    name: '7nm Standard Cell Layout',
-    department: 'Physical Design',
-    status: 'Upcoming',
-    date: 'May 2026',
-    description: 'Custom layout design of basic logic gates using advanced 7nm FinFET technology nodes.',
-    longDescription: 'This project involves the manual layout design of a standard cell library using advanced 7nm FinFET technology nodes. We focus on optimizing cell area, power, and performance (PPA). The library includes basic gates like AND, OR, NOT, and more complex cells like flip-flops and multiplexers. We use industry-standard EDA tools for DRC (Design Rule Check) and LVS (Layout vs. Schematic) verification.',
-    image: 'https://picsum.photos/seed/layout/800/600',
+    date: '14 Feb 2026',
+    description: 'Designing a low-power neural processing unit with an SNN accelerator integrated into the Ibex RISC-V core.',
+    longDescription: 'This project targets an energy-efficient NPU pipeline paired with a spiking neural network (SNN) accelerator, integrated into the Ibex RISC-V core. The focus is on optimized dataflow, reduced memory movement, and power-aware control logic to support edge inference workloads.',
+    image: 'https://picsum.photos/seed/npu/800/600',
     githubUrl: '#',
     demoUrl: '#',
     techSpecs: {
-      architecture: '7nm FinFET',
-      tools: ['Cadence Virtuoso', 'Calibre'],
-      performance: 'Optimized PPA'
-    }
-  },
-  {
-    name: 'Club Resource Portal',
-    department: 'System Management',
-    status: 'Ongoing',
-    date: 'Feb 2026',
-    description: 'Centralized platform for CDG members to access learning resources, tools, and project documentation.',
-    longDescription: 'The CDG Resource Portal is a custom-built web application designed to streamline club operations and resource sharing. It features a curated library of VLSI tutorials, a project management dashboard, and a secure tool repository. Built with React and Firebase, the portal ensures that all members have easy access to the knowledge and tools they need to excel in their hardware design journey.',
-    image: 'https://picsum.photos/seed/portal/800/600',
-    githubUrl: 'https://github.com/cdg-vitc/resource-portal',
-    demoUrl: 'https://cdg-portal.example.com',
-    techSpecs: {
-      architecture: 'React + Firebase',
-      tools: ['Tailwind CSS', 'Framer Motion'],
-      performance: 'Real-time Sync'
+      architecture: 'Ibex RISC-V + SNN Accelerator',
+      tools: ['SystemVerilog', 'Verilator', 'Yosys', 'Python'],
+      performance: 'Low-power edge inference focus'
     }
   },
 ];
@@ -131,43 +82,19 @@ export const PROJECTS: Project[] = [
 export const EVENTS: Event[] = [
   {
     id: '1',
-    title: 'Verilog Mastery Workshop',
+    title: 'Inaugration of CDG',
     year: '2026',
-    description: 'A deep dive into advanced Verilog coding styles and synthesis optimization.',
-    icon: 'Cpu',
-    longDescription: 'This workshop covers advanced RTL design techniques, including state machine optimization, clock domain crossing, and synthesis-friendly coding styles. Participants will get hands-on experience with industry-standard tools.',
+    description: 'Venue: VOC Auditorium.',
+    icon: 'Zap',
+    longDescription: 'Our official CDG inauguration ceremony, bringing together members, faculty, and industry guests at the VOC Auditorium.',
   },
   {
     id: '2',
-    title: 'VLSI Industry Talk',
+    title: 'RISCV RoadShow',
     year: '2026',
-    description: 'Guest lecture by industry experts from Intel on the future of FinFET technology.',
-    icon: 'Mic',
-    longDescription: 'Join us for an insightful session with senior engineers from Intel. We will discuss the evolution of transistor technology, from planar FETs to FinFETs and the upcoming Gate-All-Around (GAA) architectures.',
-  },
-  {
-    id: '3',
-    title: 'Design-a-Thon 2026',
-    year: '2026',
-    description: 'Our flagship 24-hour hardware design competition.',
-    icon: 'Zap',
-    longDescription: 'The CDG Design-a-Thon is a high-intensity 24-hour challenge where teams compete to design, verify, and implement complex digital systems. This year\'s theme is "Edge AI Accelerators".',
-  },
-  {
-    id: '4',
-    title: 'FPGA Bootcamp',
-    year: '2025',
-    description: 'Intensive 3-day training on Xilinx Vivado and FPGA prototyping.',
-    icon: 'Layers',
-    longDescription: 'A comprehensive bootcamp covering the entire FPGA design flow, from RTL entry to bitstream generation and hardware debugging using ILA. Perfect for beginners and intermediate designers.',
-  },
-  {
-    id: '5',
-    title: 'ASIC Flow Seminar',
-    year: '2025',
-    description: 'Understanding the complete RTL-to-GDSII flow.',
-    icon: 'Settings',
-    longDescription: 'This seminar breaks down the complex ASIC design cycle, including synthesis, floorplanning, placement, routing, and physical verification (DRC/LVS).',
+    description: 'Venue: VOC Auditorium.',
+    icon: 'Cpu',
+    longDescription: 'A showcase event focused on RISC-V trends, demos, and community engagement at the VOC Auditorium.',
   },
 ];
 

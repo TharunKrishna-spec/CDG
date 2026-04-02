@@ -55,7 +55,7 @@ export const WhoWeAre = () => {
                 <Zap size={22} className="text-white" />
               </div>
               <div>
-                <span className="text-sm font-black uppercase tracking-widest">Est. 2024</span>
+                <span className="text-sm font-black uppercase tracking-widest">Est. 2026</span>
                 <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">VIT Chennai Campus</div>
               </div>
             </div>
@@ -101,7 +101,7 @@ export const WhoWeAre = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-t from-neon-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <Users className="text-[#d89a52] mb-4 relative z-10 group-hover:scale-110 transition-transform" size={36} />
-            <h3 className="text-base font-black uppercase tracking-widest mb-2 relative z-10">50+ Members</h3>
+            <h3 className="text-base font-black uppercase tracking-widest mb-2 relative z-10">15 Members</h3>
             <p className="text-xs text-white/40 relative z-10 leading-relaxed">A vibrant community of hardware enthusiasts.</p>
           </motion.div>
         </div>
