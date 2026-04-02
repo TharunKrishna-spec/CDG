@@ -51,6 +51,7 @@ export const BOARD: { category: string; members: BoardMember[] }[] = [
   {
     category: 'Department Leads',
     members: [
+      { name: 'Tharun Krishna', role: 'Lead', department: 'Software' },
       { name: 'Joshittha', role: 'Lead', department: 'RTL Design' },
       { name: 'Magesh', role: 'Co-Lead', department: 'RTL Design' },
       { name: 'Akhilesh', role: 'Co-Lead', department: 'RTL Design' },
@@ -63,7 +64,6 @@ export const BOARD: { category: string; members: BoardMember[] }[] = [
       { name: 'Madheswar', role: 'Lead', department: 'System Management' },
       { name: 'Mithreya', role: 'Lead', department: 'Social Media' },
       { name: 'Dinesh Raja', role: 'Co-Lead', department: 'Social Media' },
-      { name: 'Tharun Krishna', role: 'Software Lead' },
     ],
   },
 ];
